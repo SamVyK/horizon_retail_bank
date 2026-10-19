@@ -1,0 +1,32 @@
+{
+  "mode": "warehouse",
+  "window_start": "2024-01-01",
+  "window_end": "2026-09-30",
+  "all_history_records": 28500,
+  "window_records": 24366,
+  "outside_selected_window": 4134,
+  "rejected": 0,
+  "source_profiles": [
+    {
+      "source_system": "CARD",
+      "records": 9500,
+      "amount_records": 9500,
+      "first_event": "2018-01-29 16:18:13",
+      "last_event": "2026-09-30 23:14:28"
+    },
+    {
+      "source_system": "CORE",
+      "records": 9500,
+      "amount_records": 9500,
+      "first_event": "2024-01-01 08:18:10",
+      "last_event": "2026-09-30 20:30:10"
+    },
+    {
+      "source_system": "DIGITAL",
+      "records": 9500,
+      "amount_records": 765,
+      "first_event": "2024-01-01 06:40:39",
+      "last_event": "2026-09-30 17:28:39"
+    }
+  ]
+}

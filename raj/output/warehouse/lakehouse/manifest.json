@@ -1,0 +1,73 @@
+{
+  "mode": "warehouse",
+  "input_hash": "e13a91b69f90cc89e5bf035b81f4d5d60f15a3e8b63391bc4925bd4fe0065de6",
+  "created_at": "2026-10-15T23:12:37.419766+00:00",
+  "origin": "PostgreSQL lab dw schema via read-only repeatable-read export",
+  "tables": {
+    "bronze/dim_customer": {
+      "version": 1,
+      "rows": 5000
+    },
+    "bronze/dim_account": {
+      "version": 1,
+      "rows": 7500
+    },
+    "bronze/dim_card": {
+      "version": 1,
+      "rows": 5000
+    },
+    "bronze/dim_digital_user": {
+      "version": 1,
+      "rows": 4000
+    },
+    "bronze/fact_core_transaction": {
+      "version": 1,
+      "rows": 9500
+    },
+    "bronze/fact_card_transaction": {
+      "version": 1,
+      "rows": 9500
+    },
+    "bronze/fact_digital_event": {
+      "version": 1,
+      "rows": 9500
+    },
+    "silver/dim_customer": {
+      "version": 1,
+      "rows": 5000
+    },
+    "silver/dim_account": {
+      "version": 1,
+      "rows": 7500
+    },
+    "silver/dim_card": {
+      "version": 1,
+      "rows": 5000
+    },
+    "silver/dim_digital_user": {
+      "version": 1,
+      "rows": 4000
+    },
+    "silver/activity_event": {
+      "version": 1,
+      "rows": 28500
+    },
+    "gold/fact_activity": {
+      "version": 1,
+      "rows": 28500
+    },
+    "gold/dim_customer": {
+      "version": 1,
+      "rows": 5000
+    },
+    "audit/quality_issues": {
+      "version": 1,
+      "rows": 4899
+    },
+    "gold/monthly_activity": {
+      "version": 1,
+      "rows": 1184
+    }
+  },
+  "timestamp_policy": "Source wall-clock timestamps preserved. No timezone supplied; no UTC claim."
+}

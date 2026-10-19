@@ -1,0 +1,153 @@
+{
+  "mode": "warehouse",
+  "passed": true,
+  "checks": [
+    {
+      "check": "Input snapshot matches completed build",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Gold activity IDs are unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CORE accepted record IDs match",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CORE source rows accounted for",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CORE monetary sums reconcile by currency",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CORE synthetic label count preserved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CARD accepted record IDs match",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CARD source rows accounted for",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CARD monetary sums reconcile by currency",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "CARD synthetic label count preserved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "DIGITAL accepted record IDs match",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "DIGITAL source rows accounted for",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "DIGITAL monetary sums reconcile by currency",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "DIGITAL synthetic label count preserved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Monthly all-history counts reconcile to gold",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Digital missing currency not silently assigned AUD",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "monetary_reconciliation": [
+    {
+      "source": "CORE",
+      "currency": "AUD",
+      "input_total": "5633061.66",
+      "gold_total": "5633061.66",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "AED",
+      "input_total": "8630.69",
+      "gold_total": "8630.69",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "AUD",
+      "input_total": "879952.82",
+      "gold_total": "879952.82",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "EUR",
+      "input_total": "29724.05",
+      "gold_total": "29724.05",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "GBP",
+      "input_total": "9801.71",
+      "gold_total": "9801.71",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "JPY",
+      "input_total": "14469.00",
+      "gold_total": "14469.00",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "SGD",
+      "input_total": "5280.00",
+      "gold_total": "5280.00",
+      "difference": "0.00"
+    },
+    {
+      "source": "CARD",
+      "currency": "USD",
+      "input_total": "8271.11",
+      "gold_total": "8271.11",
+      "difference": "0.00"
+    },
+    {
+      "source": "DIGITAL",
+      "currency": "UNSPECIFIED",
+      "input_total": "285107.09",
+      "gold_total": "285107.09",
+      "difference": "0.00"
+    }
+  ],
+  "input_origin": "PostgreSQL lab dw schema via read-only repeatable-read export",
+  "scope": "Seven-table handoff to lakehouse and Report 1; no claim to test source-to-warehouse ETL or other workstreams."
+}

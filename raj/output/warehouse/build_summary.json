@@ -1,0 +1,14 @@
+{
+  "source_fact_rows": 28500,
+  "accepted": 28500,
+  "rejected": 0,
+  "warnings": {
+    "outside_default_reporting_window; retained": 4134,
+    "digital_currency_not_supplied; no currency inferred": 765
+  },
+  "by_source": {
+    "CORE": 9500,
+    "CARD": 9500,
+    "DIGITAL": 9500
+  }
+}

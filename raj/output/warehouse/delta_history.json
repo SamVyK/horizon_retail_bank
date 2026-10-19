@@ -1,0 +1,42 @@
+{
+  "mode": "warehouse",
+  "current_version": 1,
+  "current_rows": 28500,
+  "history": [
+    {
+      "timestamp": 1792105955775,
+      "operation": "WRITE",
+      "operationParameters": {
+        "mode": "Overwrite"
+      },
+      "engineInfo": "delta-rs:py-1.2.1",
+      "operationMetrics": {
+        "execution_time_ms": 80,
+        "num_added_files": 1,
+        "num_added_rows": 28500,
+        "num_partitions": 0,
+        "num_removed_files": 1
+      },
+      "clientVersion": "delta-rs.py-1.2.1",
+      "version": 1
+    },
+    {
+      "timestamp": 1791801871038,
+      "operation": "WRITE",
+      "operationParameters": {
+        "mode": "Overwrite"
+      },
+      "engineInfo": "delta-rs:py-1.2.1",
+      "operationMetrics": {
+        "execution_time_ms": 92,
+        "num_added_files": 1,
+        "num_added_rows": 28500,
+        "num_partitions": 0,
+        "num_removed_files": 0
+      },
+      "clientVersion": "delta-rs.py-1.2.1",
+      "version": 0
+    }
+  ],
+  "previous_version_rows": 28500
+}

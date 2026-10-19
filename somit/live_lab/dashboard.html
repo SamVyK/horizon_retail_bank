@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Horizon Fraud Data Platform</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a presenter console. Chapter rail on the left, one chapter on stage at a time, live KPI strip on top. */
+:root{
+  --bg:#0E1420; --panel:#151D2C; --panel-2:#1B2638; --line:#26344B;
+  --fg:#E7ECF4; --muted:#93A0B5; --faint:#5E6C84;
+  --accent:#4FD1C5; --accent-ink:#0B2B29;
+  --warn:#F2B84B; --bad:#F2706A; --good:#5DD39E; --info:#7AA7FF;
+  --core:#7AA7FF; --card:#F2B84B; --digital:#4FD1C5;
+  --display:'Archivo','Arial Narrow',Arial,sans-serif;
+  --body:'Public Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#F2F4F8; --panel:#FFFFFF; --panel-2:#EAEEF5; --line:#D3DAE6;
+  --fg:#121A28; --muted:#4E5B70; --faint:#7D8AA0;
+  --accent:#0E8F86; --accent-ink:#FFFFFF;
+  --warn:#B07405; --bad:#C8352E; --good:#1E8A57; --info:#2F5FC4;
+  --core:#2F5FC4; --card:#B07405; --digital:#0E8F86; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F2F4F8; --panel:#FFFFFF; --panel-2:#EAEEF5; --line:#D3DAE6;
+  --fg:#121A28; --muted:#4E5B70; --faint:#7D8AA0;
+  --accent:#0E8F86; --accent-ink:#FFFFFF;
+  --warn:#B07405; --bad:#C8352E; --good:#1E8A57; --info:#2F5FC4;
+  --core:#2F5FC4; --card:#B07405; --digital:#0E8F86; color-scheme:light}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line);
+  padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand b{font:800 20px/1 var(--display);font-stretch:80%;letter-spacing:.5px;text-transform:uppercase}
+.brand span{color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.kpis{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.kpi{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:4px 10px;display:flex;gap:8px;align-items:baseline}
+.kpi i{font-style:normal;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.kpi b{font:600 14px var(--mono)}
+.ctrl{display:flex;gap:6px;align-items:center}
+.btn{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:13px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.timer{font:500 14px var(--mono);min-width:56px;text-align:center}
+
+/* shell */
+.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:calc(100% - 60px)}
+.rail{border-right:1px solid var(--line);padding:18px 10px;display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px);overflow:auto}
+.rail button{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:center;text-align:left;background:none;border:1px solid transparent;border-radius:8px;padding:8px}
+.rail button .k{font:600 12px var(--mono);color:var(--faint);border:1px solid var(--line);border-radius:5px;text-align:center;padding:2px 0}
+.rail button .t{font-size:14px;line-height:1.25}
+.rail button .t small{display:block;color:var(--muted);font-size:11.5px}
+.rail button[aria-current="true"]{background:var(--panel);border-color:var(--line)}
+.rail button[aria-current="true"] .k{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.rail .foot{margin-top:auto;color:var(--faint);font-size:12px;padding:8px}
+.progress{height:3px;background:var(--line)}
+.progress div{height:100%;background:var(--accent);transition:width .3s}
+
+.stage{padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-width:0}
+.chap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.eyebrow{font:500 12px var(--mono);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font:800 clamp(30px,4.2vw,52px)/1.02 var(--display);font-stretch:78%;text-transform:uppercase;letter-spacing:.3px}
+h2{font:700 22px/1.2 var(--display);font-stretch:85%}
+h3{font:600 15px/1.3 var(--body)}
+p{margin:0;max-width:68ch}
+.lede{font-size:17px;color:var(--muted);max-width:72ch}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.panel.flat{background:transparent}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font:700 30px/1 var(--display);font-stretch:85%;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.tag{display:inline-block;width:fit-content;font:500 11px var(--mono);padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.tag.good{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.tag.bad{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,transparent)}
+.tag.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.tag.info{color:var(--info);border-color:color-mix(in srgb,var(--info) 45%,transparent)}
+.say{border-left:3px solid var(--accent);background:var(--panel);padding:12px 16px;border-radius:0 8px 8px 0;font-size:15px}
+.say::before{content:"Say";display:block;font:500 11px var(--mono);color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+body.notes-off .say{display:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;flex-wrap:wrap}
+.seg button{background:transparent;border:0;padding:6px 12px;font-size:13px;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tr.hl td{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+svg text{fill:var(--fg);font-family:var(--body)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+/* architecture */
+.arch .node rect{fill:var(--panel-2);stroke:var(--line);stroke-width:1.2;transition:stroke .2s}
+.arch .node{cursor:pointer}
+.arch .node:hover rect,.arch .node.on rect{stroke:var(--accent);stroke-width:2}
+.arch .node text.n1{font:600 13px var(--body)}
+.arch .node text.n2{font:400 11px var(--mono);fill:var(--muted)}
+.arch path.flow{fill:none;stroke:var(--line);stroke-width:1.6}
+.arch path.flow.on{stroke:var(--accent)}
+.arch circle.dot{fill:var(--accent)}
+@media (prefers-reduced-motion:reduce){.arch circle.dot{display:none}}
+
+/* id merge */
+.ids{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.idc{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--panel-2);transition:transform .5s,opacity .5s}
+.idc small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.idc b{font:500 14px var(--mono)}
+.merged .idc{opacity:.45}
+.entity{border:1px dashed var(--accent);border-radius:8px;padding:12px;text-align:center;opacity:.35;transition:opacity .4s}
+.merged .entity{opacity:1;border-style:solid}
+
+/* medallion */
+.med{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.med button{text-align:left;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.med button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.med .lv{font:800 18px var(--display);font-stretch:80%;text-transform:uppercase}
+
+/* graph */
+.net line{stroke:var(--faint);stroke-width:1.2}
+.net circle.c{fill:var(--panel-2);stroke:var(--fg);stroke-width:1.2}
+.net circle.c.fr{stroke:var(--bad);stroke-width:2}
+.net rect.e{stroke-width:1.5}
+.net text{font-size:11px}
+.net text.lab{font-family:var(--mono);fill:var(--muted)}
+
+/* fabric */
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:600}
+.tabs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.lin{display:flex;flex-direction:column;gap:6px}
+.hop{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;opacity:.25;transition:opacity .35s}
+.hop.on{opacity:1}
+.hop .h{font:500 12px var(--mono);color:var(--muted)}
+.hop .b{border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:var(--panel-2);font:500 13px var(--mono);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hop .b em{font-style:normal;color:var(--accent)}
+.mask td.v{font-family:var(--mono)}
+.role{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.res{font:600 12px var(--mono);min-width:120px;text-align:center;padding:4px 8px;border-radius:5px;border:1px solid var(--line);color:var(--faint)}
+.res.ok{color:var(--good);border-color:var(--good)}
+.res.no{color:var(--bad);border-color:var(--bad)}
+.bar{height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden}
+.bar div{height:100%}
+
+/* live */
+.pipe{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pipe .st{border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:8px 10px;font-size:12.5px;transition:border-color .15s,box-shadow .15s}
+.pipe .st b{display:block;font:600 13px var(--body)}
+.pipe .st span{color:var(--muted);font:400 11px var(--mono)}
+.pipe .st.ping{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.pipe .ar{color:var(--faint)}
+.feed{font:12.5px/1.5 var(--mono);height:300px;overflow:auto;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.feed div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.feed .t{color:var(--faint)}
+.feed .s-core{color:var(--core)} .feed .s-card{color:var(--card)} .feed .s-digital{color:var(--digital)}
+.alerts{display:flex;flex-direction:column;gap:8px;height:300px;overflow:auto}
+.alert{border:1px solid color-mix(in srgb,var(--bad) 50%,var(--line));background:color-mix(in srgb,var(--bad) 8%,var(--panel));border-radius:8px;padding:8px 10px;font-size:13px;animation:pop .35s ease-out}
+.alert b{color:var(--bad)}
+.alert small{display:block;color:var(--muted);font-family:var(--mono);font-size:11.5px}
+@keyframes pop{from{transform:translateY(-6px);opacity:.3}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.alert{animation:none}}
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.rule{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--panel-2);display:flex;flex-direction:column;gap:4px}
+.rule b{font:700 26px/1 var(--display);font-variant-numeric:tabular-nums}
+.rule.fired{border-color:var(--bad)}
+.rule small{color:var(--muted);font-size:12px}
+.empty{color:var(--faint);font-size:13px;padding:10px}
+
+.livepill.on{border-color:var(--good)} .livepill.on i{color:var(--good)} .livepill.on i::before{content:"● ";}
+.livepill.off b{color:var(--faint)}
+.toasts{position:fixed;z-index:20;top:calc(env(safe-area-inset-top,0px) + 76px);right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px;width:min(340px,calc(100vw - 32px));pointer-events:none}
+.toast{pointer-events:auto;cursor:pointer;background:var(--panel);border:1px solid var(--bad);border-left:4px solid var(--bad);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:pop .3s ease-out;transition:opacity .5s,transform .5s}
+.toast b{color:var(--bad)} .toast span{font-size:12.5px} .toast small{color:var(--muted);font-size:11.5px}
+.toast.out{opacity:0;transform:translateX(20px)}
+@media (prefers-reduced-motion:reduce){.toast{animation:none;transition:none}}
+.navbtm{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:static;height:auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+  .rail button{grid-template-columns:24px auto;flex:0 0 auto}
+  .rail button .t small,.rail .foot{display:none}
+  .g3,.g4,.rules{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g2,.med{grid-template-columns:1fr}
+  .kpis{margin-left:0}
+}
+@media (max-width:520px){
+  .g3,.g4,.rules,.ids{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="brand"><b>Horizon Retail Bank</b><span>Assignment 2</span></div>
+  <div class="kpis" aria-label="Headline figures">
+    <div class="kpi"><i>Records</i><b class="num" id="kRecords">28,500</b></div>
+    <div class="kpi"><i>Customers</i><b class="num" id="kCust">5,000</b></div>
+    <div class="kpi"><i>Fraud labels</i><b class="num" id="kLabels">338</b></div>
+    <div class="kpi"><i>HIGH rings</i><b class="num" id="kHigh">7</b></div>
+    <div class="kpi"><i>Row quality</i><b class="num" id="kRow">95.97%</b></div>
+    <div class="kpi livepill off" id="livePill"><i>Live</i><b>offline</b></div>
+  </div>
+  <div class="ctrl">
+    <button class="btn" id="tBtn" aria-label="Start or pause the presentation timer">▶</button>
+    <span class="timer" id="timer">00:00</span>
+    <button class="btn" id="notesBtn" aria-pressed="true" title="Speaker notes (N)">Notes on</button>
+  </div>
+</header>
+<div class="progress"><div id="prog" style="width:12.5%"></div></div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="Chapters"></nav>
+  <main class="stage" id="stage"></main>
+</div>
+
+<script>
+(() => {
+/* ---------------- data (team combined run, 16 Oct 2026) ---------------- */
+const months = ["2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08","2026-09"];
+const series = {
+ core:[220,202,257,266,211,232,256,247,250,272,236,297,265,267,300,257,288,306,293,310,344,342,305,320,332,287,344,325,338,343,313,333,342],
+ card:[309,235,231,197,195,184,170,166,134,144,154,136,127,141,144,136,183,142,174,143,172,160,153,148,146,142,149,136,138,137,137,157,146],
+ digital:[198,211,294,150,252,282,261,239,233,266,271,303,259,213,255,282,300,377,296,271,334,387,320,309,298,298,289,339,337,362,317,326,371]
+};
+const rules = [
+ ["DQ_REC_01","All source transactions reach the warehouse","Completeness","CRITICAL",28500,0,"PASS"],
+ ["DQ_COM_01","Transfers, BPAY, direct debits name a payee","Completeness","HIGH",5552,0,"PASS"],
+ ["DQ_COM_02","Digital payments carry an amount","Completeness","HIGH",765,0,"PASS"],
+ ["DQ_GRA_01","Every warehouse entity has a graph node","Completeness","HIGH",21500,0,"PASS"],
+ ["DQ_VAL_01","Customer was 18+ at onboarding","Validity","HIGH",5000,0,"PASS"],
+ ["DQ_VAL_02","State is a valid Australian code","Validity","MEDIUM",5000,0,"PASS"],
+ ["DQ_VAL_03","Email has a valid structure","Validity","MEDIUM",5000,0,"PASS"],
+ ["DQ_VAL_04","Phone standardised (warehouse)","Validity","MEDIUM",4000,0,"PASS"],
+ ["DQ_VAL_05","Phone standardised (raw staging)","Validity","LOW",4000,2170,"INFO"],
+ ["DQ_VAL_06","Credit limit matches card type","Validity","MEDIUM",5000,0,"PASS"],
+ ["DQ_VAL_07","Transaction amounts are positive","Validity","CRITICAL",19000,0,"PASS"],
+ ["DQ_VAL_08","Risk scores between 0 and 100","Validity","HIGH",28500,0,"PASS"],
+ ["DQ_CON_01","Closed accounts have a close date","Consistency","MEDIUM",354,0,"PASS"],
+ ["DQ_CON_02","Available = balance + overdraft","Consistency","MEDIUM",6700,0,"PASS"],
+ ["DQ_CON_03","Card used inside issue–expiry dates","Consistency","HIGH",9500,86,"FAIL"],
+ ["DQ_CON_04","Domestic card payments in AUD","Consistency","MEDIUM",9430,0,"PASS"],
+ ["DQ_CON_05","App event after user registration","Consistency","MEDIUM",9500,2,"FAIL"],
+ ["DQ_TIM_01","ACTIVE cards not past expiry","Timeliness","HIGH",4504,3198,"FAIL"],
+ ["DQ_TIM_02","Card payments inside 2024–2026 window","Timeliness","MEDIUM",9500,4134,"FAIL"],
+ ["DQ_UNI_01","One email per customer (2% allowed)","Uniqueness","MEDIUM",5000,303,"FAIL"],
+ ["DQ_ACC_01","App email = core banking email","Accuracy","CRITICAL",4000,0,"PASS"],
+ ["DQ_ACC_02","Card name and postcode = core customer","Accuracy","CRITICAL",5000,0,"PASS"],
+ ["DQ_GRA_02","Graph fraud flags = warehouse flags","Accuracy","HIGH",338,0,"PASS"]
+];
+const rings = {
+ D:{name:"Shared device ring",prio:"HIGH",cust:["21","36","37","38","39"],ents:[
+   {id:"DEV_MULE_RING_01",k:"DEVICE",all:true},{id:"103.216.220.14",k:"IP",all:true},
+   {id:"BEN_SYNDICATE_POOL",k:"PAYEE",all:true},{id:"SYND_COLLECT_ACC",k:"ACCOUNT",all:true}],
+   links:"10 device + 10 IP + 20 fraud-payee = 40",note:"$49,000 into BEN_SYNDICATE_POOL in 8 hours on 5 Nov 2025."},
+ A:{name:"Rapid transaction burst",prio:"HIGH",cust:["19","20","22","24","25","26","28","29"],ents:[
+   {id:"GW_BURST_1",k:"TERMINAL",all:true},{id:"GW_BURST_2",k:"TERMINAL",all:true},{id:"GW_BURST_3",k:"TERMINAL",all:true},
+   {id:"GW_BURST_4",k:"TERMINAL",all:true},{id:"GW_BURST_5",k:"TERMINAL",all:true}],
+   links:"28 pairs × 5 terminals = 140",note:"Five gateways hit at 19:01, 19:03, 19:05, 19:07, 19:09: a scripted attack."},
+ B:{name:"Mule account (suspicious beneficiary)",prio:"HIGH",cust:["03","23","27","40","43","44","45"],ents:[
+   {id:"BEN_MULE_AGGREGATOR_77",k:"PAYEE",all:true},{id:"AU_MULE_AGGREGATE_HUB",k:"ACCOUNT",all:true}],
+   links:"21 pairs × 2 = 42",note:"7 victims paid $34,300 into one mule in 30 hours."},
+ C:{name:"Account takeover",prio:"HIGH",cust:["01","02","04","05","06","07","08"],ents:[
+   {id:"185.220.101.5",k:"IP",of:["01","02","05","06"]},{id:"45.154.255.89",k:"IP",of:["04","07"]},
+   {id:"101.167.12.84",k:"IP",all:true}],
+   links:"21 + 6 + 1 = 28 IP links",note:"An attacker IP logged into four victims’ accounts. Ali Anderson (ENT_C000001) is one of them."}
+};
+
+/* ---------------- facts: defaults from the team run; generate_dashboard.py overrides them from PostgreSQL ---------------- */
+const F={records:28500,customers:5000,labels:338,nodes:47578,edges:55578,links:342,groups:93,
+  prio:{HIGH:[7,33],MEDIUM:[8,16],LOW:[78,158]},objects:38,columns:465,sensitive:48,schemas:5,flows:46,
+  pass:17,fail:5,info:1,controlRun:22,rowRate:95.97,ruleRate:77.3,run:1,window:24366,generated:null,source:"team run 16 Oct 2026"};
+const SNAP=window.HZ_SNAPSHOT||null;
+if(SNAP){
+  Object.keys(F).forEach(k=>{ if(SNAP[k]===undefined || SNAP[k]===null) return; if(k==='prio') Object.assign(F.prio,SNAP.prio); else F[k]=SNAP[k]; });
+  if(SNAP.monthly && SNAP.monthly.months && SNAP.monthly.months.length){ months.length=0; SNAP.monthly.months.forEach(m=>months.push(m)); ['core','card','digital'].forEach(k=>{ series[k]=SNAP.monthly[k]; }); }
+  if(SNAP.rules && SNAP.rules.length){ const byId=Object.fromEntries(SNAP.rules.map(x=>[x.rule_id,x]));
+    rules.forEach(r=>{ const x=byId[r[0]]; if(x){ r[4]=+x.rows_checked; r[5]=+x.rows_failed; r[6]=x.status; } }); }
+}
+const peakIdx=()=>{ let b=0,bi=0; months.forEach((m,i)=>{ const t=series.core[i]+series.card[i]+series.digital[i]; if(t>b){b=t;bi=i;} }); return [bi,b]; };
+const monthName=m=>{ const [y,mo]=m.split('-'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+mo-1]+' '+y; };
+
+/* ---------------- helpers ---------------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const fmt = n => n.toLocaleString('en-AU');
+const el = (h)=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstElementChild;};
+
+/* ---------------- chapters ---------------- */
+const chapters = [
+{k:"A",t:"The problem",s:"Three systems, three IDs",render:chProblem,say:"Horizon runs core banking, card processing and digital banking separately. The same person has three different IDs, so fraud that crosses systems is invisible. Assignment 1 recommended a warehouse, a lakehouse, a graph, a data fabric and live events. Assignment 2 builds all five."},
+{k:"B",t:"Architecture",s:"How the parts connect",render:chArch,say:"Click any box to see who built it and what it produced. Data flows from the source CSVs into staging and the warehouse, then out to three consumers: the lakehouse, the graph and live events. The data fabric sits beside all of them."},
+{k:"C",t:"Integration",s:"Maedeh · warehouse",render:chWarehouse,say:"Maedeh loads the CSVs into staging as raw text, then cleans and integrates them into a star schema. The mapping file turns three source IDs into one enterprise customer. Fourteen reconciliation checks prove nothing was lost."},
+{k:"D",t:"Lakehouse",s:"Raj · Report 1",render:chLakehouse,say:"Raj takes a consistent read-only snapshot of the warehouse and stores it as a versioned Delta lakehouse in bronze, silver and gold layers. Report 1 shows activity across all three systems over time: 24,366 records in the window, peaking in October 2025. 16 of 16 checks pass."},
+{k:"E",t:"Fraud rings",s:"Samnang · Report 2",render:chGraph,say:"Samnang turns the warehouse into a property graph of 47,578 nodes and 55,578 edges. Customers who share a device, an IP, or a payee used for fraud are linked. 342 links form 93 groups; 7 are HIGH priority, and every planted ring is found as one group."},
+{k:"F",t:"Data fabric",s:"Shubham · Report 3",render:chFabric,say:"My part is the data fabric. It describes, traces, tests and protects the data without moving it. 23 rules run in one engine: 17 pass, 5 fail with real findings and named owners. PostgreSQL itself denies analysts the real customer table."},
+{k:"G",t:"Live events",s:"Somit · notifications",render:chLive,say:"Somit makes the platform react as changes happen. Version 1 uses a PostgreSQL trigger and LISTEN/NOTIFY. Version 2 streams changes through Debezium and Redpanda to a Python consumer with four fraud rules, writes alerts to fraud_events, and shows them on a Streamlit dashboard."},
+{k:"H",t:"Results",s:"What we proved",render:chResults,say:"Every component is built, run and verified in one integrated run. The limits are stated: synthetic data, supplied fraud labels, batch rebuilds, and rules that are thresholds rather than a trained model."}
+];
+
+let cur = 0;
+const rail = $('#rail'), stage = $('#stage');
+chapters.forEach((c,i)=>{
+  const b = el(`<button type="button" aria-current="false"><span class="k">${c.k}</span><span class="t">${c.t}<small>${c.s}</small></span></button>`);
+  b.onclick = ()=>go(i);
+  rail.appendChild(b);
+});
+rail.appendChild(el(`<div class="foot">← → to move · N toggles notes<br>Team: Divaakar, Maedeh, Raj, Samnang, Shubham, Somit</div>`));
+
+function go(i){
+  cur = Math.max(0,Math.min(chapters.length-1,i));
+  [...rail.querySelectorAll('button')].forEach((b,j)=>b.setAttribute('aria-current',j===cur));
+  $('#prog').style.width = ((cur+1)/chapters.length*100)+'%';
+  stopLive();
+  const c = chapters[cur];
+  stage.innerHTML = '';
+  const wrap = el(`<section class="chap" aria-labelledby="h-${c.k}"></section>`);
+  stage.appendChild(wrap);
+  c.render(wrap, c);
+  wrap.appendChild(el(`<div class="say">${c.say}</div>`));
+  const nav = el(`<div class="navbtm"><button class="btn" ${cur===0?'disabled':''}>← ${cur>0?chapters[cur-1].t:''}</button><button class="btn primary" ${cur===chapters.length-1?'disabled':''}>${cur<chapters.length-1?chapters[cur+1].t:'End'} →</button></div>`);
+  nav.children[0].onclick=()=>go(cur-1); nav.children[1].onclick=()=>go(cur+1);
+  wrap.appendChild(nav);
+  window.scrollTo({top:0});
+  try{ localStorage.setItem('hz-chap',cur) }catch(e){}
+  if(location.hash!=='#'+c.k) history.replaceState(null,'','#'+c.k);
+}
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea')) return;
+  if(e.key==='ArrowRight') go(cur+1);
+  if(e.key==='ArrowLeft') go(cur-1);
+  if(e.key==='n'||e.key==='N') toggleNotes();
+});
+function toggleNotes(){
+  const off = document.body.classList.toggle('notes-off');
+  $('#notesBtn').textContent = off?'Notes off':'Notes on';
+  $('#notesBtn').setAttribute('aria-pressed',!off);
+}
+$('#notesBtn').onclick = toggleNotes;
+/* timer */
+let tOn=false,tSec=0,tInt=null;
+$('#tBtn').onclick=()=>{
+  tOn=!tOn; $('#tBtn').textContent=tOn?'❚❚':'▶';
+  if(tOn){ tInt=setInterval(()=>{tSec++; const m=String(Math.floor(tSec/60)).padStart(2,'0'),s=String(tSec%60).padStart(2,'0'); $('#timer').textContent=m+':'+s; $('#timer').style.color = tSec>600?'var(--bad)':tSec>480?'var(--warn)':''; },1000);}
+  else clearInterval(tInt);
+};
+
+/* ---------- A: problem ---------- */
+function chProblem(w,c){
+  w.append(el(`<div class="eyebrow">Chapter A · The problem</div>`));
+  w.append(el(`<h1 id="h-A">One customer, three systems, nobody sees the fraud</h1>`));
+  w.append(el(`<p class="lede">Ali Anderson exists three times at Horizon. On 15 Mar 2025 his account sent <b class="num">$8,347.49</b> to <span class="mono">BEN_MULE_ATO_01</span> with a risk score of 92. It was an account takeover, but each system saw only its own slice.</p>`));
+  const box = el(`<div class="panel"><div class="ids" id="ids">
+     <div class="idc"><small>Core banking</small><b>CORE_C000001</b><div class="tag info">transfers</div></div>
+     <div class="idc"><small>Card processing</small><b>CARD_C000673</b><div class="tag warn">card taps</div></div>
+     <div class="idc"><small>Digital banking</small><b>DIG_U001144</b><div class="tag">app logins</div></div>
+     <div class="idc"><small>Mapping file</small><b>5,000 rows</b><div class="tag">the glue</div></div>
+   </div>
+   <div class="entity"><small class="mono" style="color:var(--muted)">After integration</small><div style="font:700 22px var(--display);font-stretch:85%">ENT_C000001 · one enterprise customer</div></div>
+   <div><button class="btn primary" id="mergeBtn">Join the three IDs</button></div></div>`);
+  w.append(box);
+  $('#mergeBtn',box).onclick=()=>{ const p=box; p.classList.toggle('merged'); $('#mergeBtn',box).textContent=p.classList.contains('merged')?'Split them again':'Join the three IDs'; };
+  const rec = [["Integrated data warehouse","Maedeh","C"],["Governed lakehouse + Report 1","Raj","D"],["Graph for fraud rings + Report 2","Samnang","E"],["Data fabric + Report 3","Shubham","F"],["Real-time change events","Somit","G"],["Synthetic data from the dictionary","Divaakar","C"]];
+  const g = el(`<div class="grid g3"></div>`);
+  rec.forEach(([a,b,k])=>{const p=el(`<button class="panel" style="text-align:left;cursor:pointer"><span class="tag">Assignment 1 → 2</span><h3>${a}</h3><span style="color:var(--muted);font-size:13px">${b} · chapter ${k}</span></button>`); p.onclick=()=>go("ABCDEFGH".indexOf(k)); g.append(p);});
+  w.append(el(`<h2>What Assignment 1 recommended, and who built it</h2>`)); w.append(g);
+  const d = el(`<div class="grid g4"></div>`);
+  [["9","source CSV files"],["28,500","transactions and events"],["338","supplied fraud labels"],["295","answer-key scenario rows"]].forEach(([n,l])=>d.append(el(`<div class="stat panel flat"><b>${n}</b><span>${l}</span></div>`)));
+  w.append(d);
+}
+
+/* ---------- B: architecture ---------- */
+const archNodes = [
+ {id:"src",x:20,y:150,w:150,t:"Source CSVs",s:"9 files · Divaakar",d:"Synthetic data for three systems plus the mapping file and the answer key. 5,000 customers, 7,500 accounts, 5,000 cards, 4,000 digital users, 28,500 activity rows.",tech:"CSV · Schema.xlsx dictionary"},
+ {id:"stg",x:215,y:150,w:150,t:"Staging",s:"8 tables · TEXT",d:"Raw copies loaded with COPY inside one transaction, all columns as TEXT so nothing is rejected on arrival.",tech:"PostgreSQL · COPY · BEGIN/COMMIT"},
+ {id:"dw",x:410,y:150,w:160,t:"Warehouse",s:"star schema · Maedeh",d:"4 dimensions and 3 facts. Surrogate keys, foreign keys, cleaning (TRIM, LOWER, +61 phones), ID mapping, ON CONFLICT. 14 checks pass.",tech:"PostgreSQL · ETL · constraints"},
+ {id:"lake",x:640,y:30,w:180,t:"Lakehouse",s:"Delta · Raj · Report 1",d:"Read-only REPEATABLE READ export, then bronze, silver and gold Delta tables with versions and an audit table. DuckDB answers Report 1. 16/16 checks pass.",tech:"Python · deltalake · PyArrow · DuckDB"},
+ {id:"graph",x:640,y:150,w:180,t:"Fraud graph",s:"Samnang · Report 2",d:"47,578 nodes and 55,578 edges. 342 customer links, 93 groups, 7 HIGH. Copied to Neo4j with counts matching.",tech:"PostgreSQL graph schema · Neo4j · Cypher"},
+ {id:"live",x:640,y:270,w:180,t:"Live events",s:"Somit · alerts",d:"V1: tcn trigger + LISTEN/NOTIFY. V2: Debezium reads the WAL, Redpanda carries the events, fraud.py applies 4 rules and writes fraud_events, Streamlit shows them.",tech:"Logical replication · Kafka API · Python"},
+ {id:"fab",x:410,y:300,w:160,t:"Data fabric",s:"Shubham · Report 3",d:"Catalog, lineage, 23 quality rules, masked views and least-privilege roles over every layer. Describe, trace, test, protect.",tech:"PostgreSQL metadata · PL/pgSQL · RBAC"}
+];
+const archEdges=[["src","stg"],["stg","dw"],["dw","lake"],["dw","graph"],["dw","live"],["fab","stg"],["fab","dw"],["fab","graph"]];
+function chArch(w){
+  w.append(el(`<div class="eyebrow">Chapter B · Architecture</div>`));
+  w.append(el(`<h1 id="h-B">From nine CSV files to three reports and live alerts</h1>`));
+  const panel = el(`<div class="panel"><div class="scroll"><svg class="arch" viewBox="0 0 840 390" width="100%" style="min-width:680px" role="img" aria-label="Architecture diagram"></svg></div><div id="archInfo"></div></div>`);
+  w.append(panel);
+  const svg=$('svg',panel), NS="http://www.w3.org/2000/svg";
+  const pos=id=>archNodes.find(n=>n.id===id);
+  const paths={};
+  archEdges.forEach(([a,b])=>{
+    const A=pos(a),B=pos(b); let d;
+    if(a==='fab'){ const x1=A.x+A.w/2, y1=A.y; const x2=B.x+B.w/2, y2=B.y+52; d = b==='graph'?`M${A.x+A.w},${A.y+26} C${600},${A.y+26} ${600},${B.y+26} ${B.x},${B.y+26}`:`M${x1},${y1} C${x1},${y1-40} ${x2},${y2+40} ${x2},${y2}`; }
+    else { const x1=A.x+A.w,y1=A.y+26,x2=B.x,y2=B.y+26; d=`M${x1},${y1} C${(x1+x2)/2},${y1} ${(x1+x2)/2},${y2} ${x2},${y2}`; }
+    const p=document.createElementNS(NS,'path'); p.setAttribute('d',d); p.setAttribute('class','flow'+(a==='fab'?'':' ')); if(a==='fab') p.setAttribute('stroke-dasharray','4 4');
+    p.dataset.a=a; p.dataset.b=b; svg.append(p); paths[a+b]=p;
+    if(a!=='fab'){ const c=document.createElementNS(NS,'circle'); c.setAttribute('r','3.5'); c.setAttribute('class','dot');
+      const m=document.createElementNS(NS,'animateMotion'); m.setAttribute('dur',(2.2+Math.random()).toFixed(1)+'s'); m.setAttribute('repeatCount','indefinite'); m.setAttribute('path',d); c.append(m); svg.append(c);}
+  });
+  archNodes.forEach(n=>{
+    const g=document.createElementNS(NS,'g'); g.setAttribute('class','node'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label',n.t);
+    g.innerHTML=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="52" rx="8"></rect><text class="n1" x="${n.x+12}" y="${n.y+22}">${n.t}</text><text class="n2" x="${n.x+12}" y="${n.y+40}">${n.s}</text>`;
+    const pick=()=>{ svg.querySelectorAll('.node').forEach(x=>x.classList.remove('on')); g.classList.add('on');
+      svg.querySelectorAll('path.flow').forEach(p=>p.classList.toggle('on',p.dataset.a===n.id||p.dataset.b===n.id));
+      $('#archInfo',panel).innerHTML=`<div class="grid g2"><div><h2>${n.t}</h2><p style="margin-top:6px">${n.d}</p></div><div><span class="tag">Technology</span><p class="mono" style="margin-top:8px;font-size:13px">${n.tech}</p></div></div>`; };
+    g.onclick=pick; g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}};
+    svg.append(g);
+  });
+  const t=document.createElementNS(NS,'text'); t.setAttribute('x',412); t.setAttribute('y',382); t.setAttribute('font-size','11'); t.setAttribute('fill','var(--muted)'); t.textContent='dashed = governs (catalog, lineage, rules)'; svg.append(t);
+  [...svg.querySelectorAll('.node')][2].dispatchEvent(new Event('click'));
+  w.append(el(`<div class="grid g3">
+   <div class="panel"><span class="tag info">Report 1</span><h3>What happened across the bank over time?</h3><p style="color:var(--muted);font-size:13.5px">Raj · DuckDB on gold</p></div>
+   <div class="panel"><span class="tag warn">Report 2</span><h3>Which customers are secretly connected?</h3><p style="color:var(--muted);font-size:13.5px">Samnang · graph + Neo4j</p></div>
+   <div class="panel"><span class="tag good">Report 3</span><h3>Can the bank trust its data, and who may see it?</h3><p style="color:var(--muted);font-size:13.5px">Shubham · governance views</p></div></div>`));
+  w.append(el(`<p class="mono" style="font-size:12.5px;color:var(--muted)">One command builds it all in order: run_all.ps1 (Windows) or run_all_mac.sh → ALL STEPS COMPLETED.</p>`));
+}
+
+/* ---------- C: warehouse ---------- */
+function chWarehouse(w){
+  w.append(el(`<div class="eyebrow">Chapter C · Integration · Maedeh</div>`));
+  w.append(el(`<h1 id="h-C">A loading dock, then labelled shelves</h1>`));
+  w.append(el(`<p class="lede">Staging keeps every value as raw text so nothing is rejected on arrival. The warehouse then cleans, types and links the data into a star schema that every other component reads from.</p>`));
+  const steps=[["01","Create schemas","staging and dw"],["02","Staging tables","8 tables, all TEXT"],["02b","Bulk load","COPY in one transaction"],["03","Star schema","4 dims, 3 facts, keys, indexes"],["04","ETL","clean, cast, map IDs, ON CONFLICT"],["05","Reconcile","14 checks, all pass"]];
+  const sc=el(`<div class="grid g3"></div>`);
+  steps.forEach(([n,a,b])=>sc.append(el(`<div class="panel"><span class="tag mono">script ${n}</span><h3>${a}</h3><span style="color:var(--muted);font-size:13px">${b}</span></div>`)));
+  w.append(sc);
+  const t=el(`<div class="grid g2"><div class="panel"><h2>Star schema</h2><div class="scroll"><table>
+   <tr><th>Table</th><th>Type</th><th class="n">Rows</th></tr>
+   <tr><td>dim_customer</td><td>dimension</td><td class="n">5,000</td></tr>
+   <tr><td>dim_account</td><td>dimension</td><td class="n">7,500</td></tr>
+   <tr><td>dim_card</td><td>dimension</td><td class="n">5,000</td></tr>
+   <tr><td>dim_digital_user</td><td>dimension</td><td class="n">4,000</td></tr>
+   <tr class="hl"><td>fact_core_transaction</td><td>fact</td><td class="n">9,500</td></tr>
+   <tr class="hl"><td>fact_card_transaction</td><td>fact</td><td class="n">9,500</td></tr>
+   <tr class="hl"><td>fact_digital_event</td><td>fact</td><td class="n">9,500</td></tr></table></div></div>
+   <div class="panel"><h2>Cleaning one record</h2><div class="scroll"><table>
+   <tr><th>Field</th><th>Raw (staging)</th><th>Warehouse</th></tr>
+   <tr><td>phone</td><td class="mono">0422 728 244</td><td class="mono">+61422728244</td></tr>
+   <tr><td>amount</td><td class="mono">'8347.49' (text)</td><td class="mono">8347.49 (numeric)</td></tr>
+   <tr><td>email</td><td class="mono">ali.anderson@outlook.com</td><td class="mono">TRIM + LOWER applied</td></tr>
+   <tr><td>customer</td><td class="mono">CORE_C000001</td><td class="mono">customer_key 1 · ENT_C000001</td></tr></table></div>
+   <p style="font-size:13px;color:var(--muted)">Ali Anderson’s real staging and warehouse values. Rules: TRIM, LOWER, dw.normalise_phone, NULLIF + casts, JOIN to the mapping file.</p></div></div>`);
+  w.append(t);
+  w.append(el(`<div class="chips"><span class="tag good">BEGIN … COMMIT: no half loads</span><span class="tag good">REFERENCES: no orphan rows</span><span class="tag good">ON CONFLICT: safe re-runs</span><span class="tag warn">Limit: no SCD2, no date dimension, batch only</span></div>`));
+}
+
+/* ---------- D: lakehouse ---------- */
+function chLakehouse(w){
+  w.append(el(`<div class="eyebrow">Chapter D · Lakehouse · Raj</div>`));
+  w.append(el(`<h1 id="h-D">Keep the raw, standardise, then serve</h1>`));
+  const med=el(`<div class="med">
+   <button aria-pressed="true" data-l="0"><span class="lv" style="color:#C98A4B">Bronze</span><span>7 warehouse tables, untouched</span><span class="mono" style="font-size:12px;color:var(--muted)">the original is always there</span></button>
+   <button aria-pressed="false" data-l="1"><span class="lv" style="color:var(--muted)">Silver</span><span>3 activity tables, one shape</span><span class="mono" style="font-size:12px;color:var(--muted)">activity_event + keys</span></button>
+   <button aria-pressed="false" data-l="2"><span class="lv" style="color:var(--warn)">Gold</span><span>28,500 report-ready rows</span><span class="mono" style="font-size:12px;color:var(--muted)">fact_activity · monthly_activity</span></button></div>`);
+  const det=el(`<div class="panel" id="medInfo"></div>`);
+  const info=["Bronze is a copy of the warehouse taken with REPEATABLE READ, READ ONLY, so all seven tables come from one consistent moment. Each write adds a version to _delta_log. The team run is at version 1.","Silver puts core transfers, card taps and app events into one activity_event table with the same columns, so all three systems can be counted together.","Gold holds fact_activity, dim_customer and monthly_activity. DuckDB runs Report 1 straight on these files. The audit table keeps 4,134 old card rows and 765 digital amounts with no currency as warnings: 0 rows rejected."];
+  med.querySelectorAll('button').forEach(b=>b.onclick=()=>{med.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); det.innerHTML=`<p>${info[b.dataset.l]}</p>`;});
+  det.innerHTML=`<p>${info[0]}</p>`;
+  w.append(med); w.append(det);
+  /* chart */
+  const cp=el(`<div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><h2>Report 1 · Monthly activity, Jan 2024 – Sep 2026</h2>
+    <div class="seg" id="sysSeg"><button aria-pressed="true" data-s="core">Core</button><button aria-pressed="true" data-s="card">Card</button><button aria-pressed="true" data-s="digital">Digital</button></div></div>
+    <div class="legend"><span><i style="background:var(--core)"></i>Core transfers</span><span><i style="background:var(--card)"></i>Card transactions</span><span><i style="background:var(--digital)"></i>Digital events</span></div>
+    <div class="scroll"><svg id="chart" viewBox="0 0 860 280" width="100%" style="min-width:600px" role="img" aria-label="Stacked monthly activity"></svg></div>
+    <div id="tip" class="mono" style="font-size:12.5px;color:var(--muted);min-height:20px">Hover a month to read its numbers.</div></div>`);
+  w.append(cp);
+  const on={core:true,card:true,digital:true};
+  cp.querySelectorAll('#sysSeg button').forEach(b=>b.onclick=()=>{on[b.dataset.s]=!on[b.dataset.s]; b.setAttribute('aria-pressed',on[b.dataset.s]); draw();});
+  function draw(){
+    const svg=$('#chart',cp), NS="http://www.w3.org/2000/svg"; svg.innerHTML='';
+    const L=44,R=10,T=14,B=34,W=860-L-R,H=280-T-B, n=months.length, bw=W/n;
+    const tot=months.map((_,i)=>['core','card','digital'].reduce((a,s)=>a+(on[s]?series[s][i]:0),0));
+    const max=1000;
+    for(let v=0;v<=max;v+=250){ const y=T+H-(v/max)*H;
+      svg.insertAdjacentHTML('beforeend',`<line x1="${L}" x2="${L+W}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y+4}" font-size="11" text-anchor="end" fill="var(--muted)">${v}</text>`);}
+    months.forEach((m,i)=>{ let y=T+H; const x=L+i*bw+2;
+      ['core','card','digital'].forEach(s=>{ if(!on[s]) return; const h=series[s][i]/max*H; y-=h;
+        svg.insertAdjacentHTML('beforeend',`<rect x="${x}" y="${y}" width="${bw-4}" height="${h}" fill="var(--${s})" rx="1.5"/>`);});
+      if(m.endsWith('-01')||m==='2026-09') svg.insertAdjacentHTML('beforeend',`<text x="${x+(bw-4)/2}" y="${T+H+16}" font-size="11" text-anchor="middle" fill="var(--muted)">${m.endsWith('-01')?m.slice(0,4):'Sep 26'}</text>`);
+      const hit=document.createElementNS(NS,'rect'); hit.setAttribute('x',L+i*bw); hit.setAttribute('y',T); hit.setAttribute('width',bw); hit.setAttribute('height',H); hit.setAttribute('fill','transparent');
+      hit.onmouseenter=()=>{ $('#tip',cp).textContent=`${m} · core ${series.core[i]} · card ${series.card[i]} · digital ${series.digital[i]} · shown total ${tot[i]}`; };
+      svg.append(hit);
+    });
+    if(on.core&&on.card&&on.digital){ const [i,pk]=peakIdx(); const x=L+i*bw+bw/2, y=T+H-tot[i]/max*H;
+      svg.insertAdjacentHTML('beforeend',`<line x1="${x}" x2="${x}" y1="${y-4}" y2="${y-22}" stroke="var(--fg)"/><text x="${x}" y="${y-27}" font-size="11.5" text-anchor="middle" font-weight="600">Peak ${monthName(months[i])} · ${pk}</text>`);}
+  }
+  draw();
+  w.append(el(`<div class="grid g4">
+    <div class="stat panel"><b>${fmt(F.window)}</b><span>records in the 2024–2026 window</span></div>
+    <div class="stat panel"><b>$5.38M</b><span>core AUD, successful (8,952)</span></div>
+    <div class="stat panel"><b>225</b><span>card declines · 45 failed logins</span></div>
+    <div class="stat panel"><b>16 / 16</b><span>verification checks pass</span></div></div>`));
+}
+
+/* ---------- E: graph ---------- */
+function chGraph(w){
+  w.append(el(`<div class="eyebrow">Chapter E · Fraud rings · Samnang</div>`));
+  w.append(el(`<h1 id="h-E">Fraud hides in what customers share</h1>`));
+  w.append(el(`<p class="lede">A shared device or IP always links two customers. A shared payee, account or terminal links them only when two or more customers used it for fraud. Anything shared by more than 10 customers, such as 7-Eleven with 461, is a supernode and never links.</p>`));
+  const top=el(`<div class="grid g4">
+    <div class="stat panel"><b>${fmt(F.nodes)}</b><span>nodes · 10 types</span></div>
+    <div class="stat panel"><b>${fmt(F.edges)}</b><span>edges · 9 types</span></div>
+    <div class="stat panel"><b>${fmt(F.links)}</b><span>customer links</span></div>
+    <div class="stat panel"><b>${fmt(F.groups)}</b><span>connected groups</span></div></div>`);
+  w.append(top);
+  const p=el(`<div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center"><h2 id="ringTitle"></h2><div class="seg" id="ringSeg">
+     <button data-r="D" aria-pressed="true">Ring D · device</button><button data-r="A" aria-pressed="false">Ring A · burst</button><button data-r="B" aria-pressed="false">Ring B · mule</button><button data-r="C" aria-pressed="false">Ring C · takeover</button></div></div>
+     <div class="grid g2" style="align-items:start"><div class="scroll"><svg class="net" id="net" viewBox="0 0 520 380" width="100%" style="min-width:420px" role="img" aria-label="Fraud ring network"></svg></div>
+     <div id="ringInfo" style="display:flex;flex-direction:column;gap:10px"></div></div></div>`);
+  w.append(p);
+  const kc={DEVICE:'var(--bad)',IP:'var(--info)',PAYEE:'var(--warn)',ACCOUNT:'var(--card)',TERMINAL:'var(--digital)'};
+  function drawRing(r){
+    const R=rings[r], svg=$('#net',p); svg.innerHTML='';
+    $('#ringTitle',p).textContent=R.name;
+    const cx=260,cy=190, n=R.cust.length, rad=150;
+    const cp=R.cust.map((c,i)=>{const a=-Math.PI/2+i*2*Math.PI/n; return {c,x:cx+rad*Math.cos(a),y:cy+rad*Math.sin(a)};});
+    const m=R.ents.length, ep=R.ents.map((e,i)=>({...e,x:cx+(m===1?0:(i-(m-1)/2)*Math.min(70,320/m)),y:cy+(i%2?18:-18)}));
+    ep.forEach(e=>cp.forEach(c=>{ if(e.all||(e.of&&e.of.includes(c.c))) svg.insertAdjacentHTML('beforeend',`<line x1="${c.x}" y1="${c.y}" x2="${e.x}" y2="${e.y}"/>`);}));
+    ep.forEach(e=>svg.insertAdjacentHTML('beforeend',`<rect class="e" x="${e.x-9}" y="${e.y-9}" width="18" height="18" rx="3" fill="${kc[e.k]}" stroke="${kc[e.k]}"/>`));
+    cp.forEach(c=>svg.insertAdjacentHTML('beforeend',`<circle class="c fr" cx="${c.x}" cy="${c.y}" r="17"/><text x="${c.x}" y="${c.y+4}" text-anchor="middle" font-family="var(--mono)">${c.c}</text>`));
+    svg.insertAdjacentHTML('beforeend',`<text class="lab" x="10" y="370">circles = customers ENT_C0000xx (red ring = fraud-flagged) · squares = shared entities</text>`);
+    $('#ringInfo',p).innerHTML=`<div class="chips"><span class="tag bad">${R.prio} priority</span><span class="tag">${R.cust.length} customers, all fraud-flagged</span></div>
+      <div class="scroll"><table><tr><th>Shared entity</th><th>Type</th></tr>${R.ents.map(e=>`<tr><td class="mono">${e.id}</td><td><span class="tag" style="color:${kc[e.k]};border-color:${kc[e.k]}">${e.k}</span></td></tr>`).join('')}</table></div>
+      <p><b>Links:</b> <span class="mono">${R.links}</span></p><p style="color:var(--muted)">${R.note}</p>`;
+  }
+  p.querySelectorAll('#ringSeg button').forEach(b=>b.onclick=()=>{p.querySelectorAll('#ringSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b)); drawRing(b.dataset.r);});
+  drawRing('D');
+  const pr=el(`<div class="grid g2"><div class="panel"><h2>Where investigators start</h2>
+     ${[["HIGH","2+ members fraud-flagged",F.prio.HIGH[0],F.prio.HIGH[1],"bad"],["MEDIUM","exactly 1 member flagged",F.prio.MEDIUM[0],F.prio.MEDIUM[1],"warn"],["LOW","nobody flagged",F.prio.LOW[0],F.prio.LOW[1],"good"]].map(([a,b,g,c,cls])=>`<div style="display:grid;grid-template-columns:80px 1fr 110px;gap:10px;align-items:center"><span class="tag ${cls}">${a}</span><div class="bar"><div style="width:${g/Math.max(F.prio.LOW[0],F.prio.HIGH[0],F.prio.MEDIUM[0],1)*100}%;background:var(--${cls})"></div></div><span class="mono num" style="font-size:12.5px">${g} groups · ${c}</span></div><small style="color:var(--muted);margin-top:-6px">${b}</small>`).join('')}
+     <p style="font-size:13.5px">33 of 5,000 customers to review first.</p></div>
+     <div class="panel"><h2>Checked against the answer key</h2><div class="scroll"><table>
+     <tr><th>Planted scenario</th><th class="n">Customers</th><th>Found as</th></tr>
+     <tr><td>Shared Device Ring</td><td class="n">5</td><td><span class="tag bad">1 HIGH group</span></td></tr>
+     <tr><td>Suspicious Beneficiary</td><td class="n">7</td><td><span class="tag bad">1 HIGH group</span></td></tr>
+     <tr><td>Account Takeover</td><td class="n">7</td><td><span class="tag bad">1 HIGH group</span></td></tr>
+     <tr><td>Rapid Transaction Burst</td><td class="n">8</td><td><span class="tag bad">1 HIGH group</span></td></tr>
+     <tr><td>Benign Shared Device (family tablet)</td><td class="n">2</td><td><span class="tag good">LOW ✓ not accused</span></td></tr></table></div>
+     <p style="font-size:13px;color:var(--muted)">Priority uses the supplied labels: it shows the graph finds the planted rings, not prediction accuracy. Neo4j copy: RESULT MATCH.</p></div></div>`);
+  w.append(pr);
+}
+
+/* ---------- F: fabric ---------- */
+function chFabric(w){
+  w.append(el(`<div class="eyebrow">Chapter F · Data fabric · Shubham</div>`));
+  w.append(el(`<h1 id="h-F">Describe, trace, test, protect</h1>`));
+  w.append(el(`<p class="lede">A governance layer inside PostgreSQL that sits beside the warehouse and never changes its data. Script 06 builds it, Samnang plugs the graph in, 07 runs a cycle, 08 produces Report 3.</p>`));
+  const tabs=el(`<div class="tabs"><button aria-pressed="true" data-t="d">Describe</button><button aria-pressed="false" data-t="t">Trace</button><button aria-pressed="false" data-t="q">Test</button><button aria-pressed="false" data-t="p">Protect</button></div>`);
+  const body=el(`<div></div>`);
+  w.append(tabs); w.append(body);
+  const views={
+   d:()=>{ body.innerHTML=`<div class="grid g4">
+      <div class="stat panel"><b>${fmt(F.objects)}</b><span>tables and views catalogued</span></div><div class="stat panel"><b>${fmt(F.columns)}</b><span>columns catalogued</span></div>
+      <div class="stat panel"><b>${F.sensitive}</b><span>sensitive columns found</span></div><div class="stat panel"><b>${F.schemas}</b><span>schemas watched</span></div></div>
+      <div class="grid g2" style="margin-top:16px"><div class="panel"><h2>Registry → catalog</h2><p>managed_schema lists the watched schemas; table_description gives each table a business owner and grain. refresh_catalog() reads information_schema, counts rows with dynamic SQL, and classify_column() labels every column by name.</p></div>
+      <div class="panel"><h2>dw.dim_customer columns</h2><div class="chips">${[["first_name","PII_DIRECT","bad"],["last_name","PII_DIRECT","bad"],["date_of_birth","PII_DIRECT","bad"],["email","PII_DIRECT","bad"],["phone","PII_DIRECT","bad"],["address_line","PII_DIRECT","bad"],["postcode","PII_QUASI","warn"],["gender","PII_QUASI","warn"],["annual_income","FINANCIAL","info"],["customer_key","IDENTIFIER",""],["kyc_status","GENERAL",""]].map(([a,b,c])=>`<span class="tag ${c}">${a} · ${b}</span>`).join('')}</div><p style="font-size:13px;color:var(--muted)">Active metadata: a new column is labelled the next time the catalog refreshes.</p></div></div>`; },
+   t:()=>{ const hops=[["4","file:core_customers.csv","INGEST · 02b"],["3","staging.core_customers","TRANSFORM · 04"],["2","dw.dim_customer","KEY_LOOKUP · 04"],["1","dw.dim_card","KEY_LOOKUP · 04"],["0","dw.fact_card_transaction","target"]];
+      body.innerHTML=`<div class="grid g2"><div class="panel"><h2>trace_upstream('dw.fact_card_transaction')</h2><div class="lin" id="lin">${hops.map(h=>`<div class="hop on"><span class="h">hop ${h[0]}</span><div class="b"><span>${h[1]}</span><em>${h[2]}</em></div></div>`).join('')}</div><div><button class="btn primary" id="traceBtn">Trace backwards</button></div></div>
+      <div class="panel"><h2>How it works</h2><p>governance.lineage holds one row per flow: source, target, type and the script that does it. A WITH RECURSIVE query follows targets back to sources until it reaches a file, stopping at 10 hops.</p>
+      <div class="grid g2"><div class="stat"><b>${F.flows}</b><span>lineage flows (27 mine + 19 graph)</span></div><div class="stat"><b>12 / 4</b><span>flows / hops for the card fact</span></div></div>
+      <div class="chips"><span class="tag">INGEST</span><span class="tag">TRANSFORM</span><span class="tag">KEY_LOOKUP</span><span class="tag">DERIVED_VIEW</span></div></div></div>`;
+      $('#traceBtn',body).onclick=()=>{ const hs=[...body.querySelectorAll('.hop')].reverse(); hs.forEach(h=>h.classList.remove('on')); hs.forEach((h,i)=>setTimeout(()=>h.classList.add('on'),i*450)); }; },
+   q:()=>{ body.innerHTML=`<div class="grid g4">
+      <div class="stat panel"><b style="color:var(--good)">${F.pass}</b><span>PASS</span></div><div class="stat panel"><b style="color:var(--bad)">${F.fail}</b><span>FAIL · real findings</span></div>
+      <div class="stat panel"><b style="color:var(--info)">${F.info}</b><span>INFO · raw profile</span></div><div class="stat panel"><b>${F.rowRate}%</b><span>rows pass · ${F.ruleRate}% of rules</span></div></div>
+      <div class="panel" style="margin-top:16px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h2>The ${rules.length} rules · run ${F.run}</h2>
+      <div class="seg" id="qf"><button aria-pressed="true" data-f="ALL">All</button><button aria-pressed="false" data-f="FAIL">Fails</button><button aria-pressed="false" data-f="Completeness">Completeness</button><button aria-pressed="false" data-f="Validity">Validity</button><button aria-pressed="false" data-f="Consistency">Consistency</button><button aria-pressed="false" data-f="Timeliness">Timeliness</button><button aria-pressed="false" data-f="Uniqueness">Uniqueness</button><button aria-pressed="false" data-f="Accuracy">Accuracy</button></div></div>
+      <div class="scroll"><table id="qt"></table></div><p style="font-size:13px;color:var(--muted)">DQ_TIM_01 compares with today’s date, so its count grows daily (3,198 on 16 Oct, 3,208 on 19 Oct). Card tables are AT RISK; owner: Head of Cards.</p></div>`;
+      const qt=$('#qt',body);
+      const paint=f=>{ const rs=rules.filter(r=>f==='ALL'||r[6]===f||r[2]===f).sort((a,b)=>({FAIL:0,INFO:1,PASS:2}[a[6]]-{FAIL:0,INFO:1,PASS:2}[b[6]]));
+        qt.innerHTML=`<tr><th>Rule</th><th>What it checks</th><th>Dimension</th><th>Severity</th><th class="n">Checked</th><th class="n">Failed</th><th>Status</th></tr>`+rs.map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="n">${fmt(r[4])}</td><td class="n">${fmt(r[5])}</td><td><span class="tag ${r[6]==='PASS'?'good':r[6]==='FAIL'?'bad':'info'}">${r[6]}</span></td></tr>`).join(''); };
+      body.querySelectorAll('#qf button').forEach(b=>b.onclick=()=>{body.querySelectorAll('#qf button').forEach(x=>x.setAttribute('aria-pressed',x===b)); paint(b.dataset.f);});
+      paint('ALL'); },
+   p:()=>{ body.innerHTML=`<div class="grid g2"><div class="panel mask"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h2>ENT_C000001 as seen by…</h2>
+      <div class="seg" id="ms"><button data-m="real" aria-pressed="false">data_steward</button><button data-m="mask" aria-pressed="true">fraud_analyst</button></div></div>
+      <div class="scroll"><table id="mt"></table></div><p style="font-size:13px;color:var(--muted)">secure.v_customer_masked. A view runs with its owner’s rights, so analysts read it without any access to dw.dim_customer.</p></div>
+      <div class="panel"><h2>Live access test · R3.15</h2><p style="font-size:13.5px">The script switches into each role with SET LOCAL ROLE and tries to read.</p>
+      <div id="acc"></div><div><button class="btn primary" id="accBtn">Run access test</button></div>
+      <div class="chips"><span class="tag good">18 / 18 policy checks OK</span><span class="tag">REVOKE ALL, then GRANT</span></div></div></div>`;
+      const real={first:"Ali",last:"Anderson",dob:"1960-12-26",email:"ali.anderson@outlook.com",phone:"+61422728244",addr:"street address"};
+      const mt=$('#mt',body);
+      const paint=m=>{ const r=m==='real'; mt.innerHTML=`<tr><th>Column</th><th>Value</th></tr>
+        <tr><td>first name</td><td class="v">${r?real.first:'A.'}</td></tr><tr><td>last name</td><td class="v">${r?real.last:'A****'}</td></tr>
+        <tr><td>date of birth</td><td class="v">${r?real.dob:'1960'}</td></tr><tr><td>email</td><td class="v">${r?real.email:'al***@outlook.com'}</td></tr>
+        <tr><td>phone</td><td class="v">${r?real.phone:'****244'}</td></tr><tr><td>address</td><td class="v">${r?real.addr:'not shown'}</td></tr>
+        <tr><td>state · risk</td><td class="v">VIC · MEDIUM</td></tr>`; };
+      body.querySelectorAll('#ms button').forEach(b=>b.onclick=()=>{body.querySelectorAll('#ms button').forEach(x=>x.setAttribute('aria-pressed',x===b)); paint(b.dataset.m);}); paint('mask');
+      const tests=[["fraud_analyst","dw.dim_customer",false],["fraud_analyst","secure.v_customer_masked",true],["compliance_auditor","dw.dim_customer",false],["compliance_auditor","secure.v_customer_masked",true],["data_steward","dw.dim_customer",true],["data_steward","secure.v_customer_masked",true]];
+      const acc=$('#acc',body); acc.innerHTML=tests.map(t=>`<div class="role"><span class="mono" style="font-size:12.5px">${t[0]}</span><span class="mono" style="font-size:12px;color:var(--muted)">${t[1]}</span><span class="res">waiting</span></div>`).join('');
+      $('#accBtn',body).onclick=()=>{ const rs=[...acc.querySelectorAll('.res')]; rs.forEach(x=>{x.className='res';x.textContent='waiting';});
+        rs.forEach((x,i)=>setTimeout(()=>{x.className='res '+(tests[i][2]?'ok':'no'); x.textContent=tests[i][2]?'ALLOWED 5,000':'DENIED';},300+i*350)); }; }
+  };
+  tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{tabs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); views[b.dataset.t]();});
+  views.d();
+}
+
+/* ---------- G: live ---------- */
+let liveTimer=null;
+function stopLive(){ if(liveTimer){clearInterval(liveTimer); liveTimer=null;} }
+
+/* Live connection to live_server.py (http://localhost:8765). Falls back to the replay when not reachable. */
+const LIVE={ok:false,base:null,e:0,a:0,first:true,events:[],alerts:[],counts:{},total:0,totalEvents:0,db:'',hook:null};
+const RULES=[["CARD_FRAUD_OVERSEAS_CLUSTER","Overseas cluster","3+ international card-not-present payments on one card in 60 min","test1"],
+             ["RAPID_TRANSACTION_BURST","Rapid burst","5+ approved payments on one card in 10 min","test2"],
+             ["SHARED_DEVICE_RING","Shared device","one device used by more than 2 users","test3"],
+             ["SUSPICIOUS_BENEFICIARY","Suspicious beneficiary","one payee receiving from more than 5 senders","test4"]];
+const RULE_NAME=Object.fromEntries(RULES.map(r=>[r[0],r[1]]));
+function liveBases(){ const b=[]; if(location.protocol.startsWith('http')&&location.port==='8765') b.push(''); b.push('http://localhost:8765','http://127.0.0.1:8765'); return b; }
+async function livePoll(){
+  const bases = LIVE.base!==null ? [LIVE.base] : liveBases();
+  for(const base of bases){
+    try{
+      const r=await fetch(base+'/api/state?e='+LIVE.e+'&a='+LIVE.a,{cache:'no-store'});
+      const d=await r.json(); if(!d.ok) throw new Error(d.error||'state');
+      const was=LIVE.ok; LIVE.ok=true; LIVE.base=base; LIVE.db=d.database;
+      if(d.events.length){ LIVE.e=d.events[d.events.length-1].log_id; LIVE.events=LIVE.events.concat(d.events).slice(-200); }
+      if(d.alerts.length){ LIVE.a=d.alerts[d.alerts.length-1].event_id; LIVE.alerts=LIVE.alerts.concat(d.alerts).slice(-100);
+        if(!LIVE.first) d.alerts.forEach(toast); }
+      if(d.total_alerts<LIVE.alerts.length || d.total_events<LIVE.events.length){ /* table was cleaned: resync */ LIVE.e=0;LIVE.a=0;LIVE.events=[];LIVE.alerts=[];LIVE.first=true; }
+      LIVE.counts=d.counts; LIVE.total=d.total_alerts; LIVE.totalEvents=d.total_events;
+      const fresh=LIVE.first; LIVE.first=false;
+      livePill();
+      if(!was && chapters[cur].k==='G') go(cur);
+      else if(LIVE.hook) LIVE.hook(d,fresh);
+      setTimeout(livePoll,1000); return;
+    }catch(err){ /* try next base */ }
+  }
+  const was=LIVE.ok; LIVE.ok=false; LIVE.base=null; livePill();
+  if(was && chapters[cur].k==='G') go(cur);
+  setTimeout(livePoll,5000);
+}
+function livePill(){
+  const p=document.getElementById('livePill'); if(!p) return;
+  p.className='kpi livepill '+(LIVE.ok?'on':'off');
+  p.innerHTML=LIVE.ok?`<i>Live</i><b class="num">${LIVE.total} alert${LIVE.total===1?'':'s'}</b>`:`<i>Live</i><b>offline</b>`;
+  p.title=LIVE.ok?'Connected to PostgreSQL ('+LIVE.db+') through live_server.py':'Start live_server.py to connect';
+}
+function toast(a){
+  const box=document.getElementById('toasts'); if(!box) return;
+  const t=el(`<div class="toast" role="status"><b>${RULE_NAME[a.event_type]||a.event_type}</b><span class="mono">${a.source_id||''} · ${a.t}</span><small>staging.fraud_events #${a.event_id}</small></div>`);
+  t.onclick=()=>go(chapters.findIndex(c=>c.k==='G'));
+  box.prepend(t); setTimeout(()=>t.classList.add('out'),6000); setTimeout(()=>t.remove(),6600);
+}
+function evLine(e){
+  const s=e.summary||{}; const tb=e.table_name; const cls=tb.startsWith('card')?'card':tb.startsWith('core')?'core':'digital';
+  let txt='';
+  if(tb==='card_transactions') txt=`${s.card||''} · ${s.merchant||''} · ${s.currency||''} ${s.amount||''} · ${s.status||''}${s.scope==='International'?' · INTERNATIONAL':''}${s.present==='FALSE'?' · CNP':''}`;
+  else if(tb==='digital_events') txt=`${s.user||''} · ${s.event||''}${s.device?' · '+s.device:''}${s.beneficiary?' → '+s.beneficiary:''}${s.amount?' · $'+s.amount:''}`;
+  else if(tb==='core_transactions') txt=`${s.account||''} · ${s.type||''} · $${s.amount||''}${s.beneficiary?' → '+s.beneficiary:''}`;
+  else if(tb==='digital_users') txt=`${e.row_id} · ${s.name||''} · ${s.status||''} · ${s.risk||''}`;
+  if(e.operation==='RULE_ERROR') txt='rule error: '+(s.error||'');
+  return el(`<div><span class="t">${e.t}</span> <span class="s-${cls}">${tb} ${e.operation} · ${txt}</span></div>`);
+}
+function alertCard(a){
+  const d=a.details||{}; let why='';
+  if(d.tx_count_60min) why=`${d.tx_count_60min} overseas card-not-present payments in 60 min${d.countries?' · '+d.countries.join(', '):''}`;
+  else if(d.tx_count_10min) why=`${d.tx_count_10min} approved payments in 10 min · total ${d.total_amount}`;
+  else if(d.distinct_users) why=`${d.distinct_users} users on ${d.device_id}: ${(d.users||[]).join(', ')}`;
+  else if(d.distinct_senders) why=`${d.distinct_senders} senders to ${d.beneficiary_reference}`;
+  return el(`<div class="alert"><b>${RULE_NAME[a.event_type]||a.event_type}</b> · <span class="mono">${a.source_id||''}</span><br>${why}<small>${a.t} · ${a.severity} · staging.fraud_events #${a.event_id}</small></div>`);
+}
+
+function chLive(w){
+  w.append(el(`<div class="eyebrow">Chapter G · Live events · Somit</div>`));
+  w.append(el(`<h1 id="h-G">Catch it while it happens</h1>`));
+  w.append(el(`<div class="grid g2"><div class="panel"><span class="tag">Version 1</span><h3>Trigger + LISTEN/NOTIFY</h3><p style="font-size:13.5px">The tcn extension adds an AFTER trigger on staging.digital_users. Every insert, update or delete sends a notification that listen.py prints. Test: 6 inserts + 3 updates + 6 deletes = 15 notifications.</p></div>
+    <div class="panel"><span class="tag info">Version 2</span><h3>Change data capture stream</h3><p style="font-size:13.5px">wal_level=logical and a publication on the three transaction tables. Debezium reads the log, Redpanda carries the events, fraud.py checks four rules and writes alerts to staging.fraud_events for the Streamlit dashboard.</p></div></div>`));
+  if(LIVE.ok) return chLiveReal(w);
+  chLiveReplay(w);
+}
+
+function chLiveReal(w){
+  const pipe=el(`<div class="panel"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag good">● Live · connected to PostgreSQL “${LIVE.db}”</span><span style="font-size:13px;color:var(--muted)">Lab mode: Somit’s 4 rules run in a database trigger, so alerts appear the moment a row is inserted. No replay.</span></div>
+     <div class="pipe">
+     <div class="st" data-st="0"><b>INSERT</b><span>CloudBeaver · Terminal · button</span></div><span class="ar">→</span>
+     <div class="st" data-st="1"><b>AFTER trigger</b><span>live_event_log</span></div><span class="ar">→</span>
+     <div class="st" data-st="2"><b>4 fraud rules</b><span>same thresholds as fraud.py</span></div><span class="ar">→</span>
+     <div class="st" data-st="3"><b>fraud_events</b><span>+ pg_notify</span></div><span class="ar">→</span>
+     <div class="st" data-st="4"><b>live_server.py</b><span>:8765</span></div><span class="ar">→</span>
+     <div class="st" data-st="5"><b>This dashboard</b><span>polls every 1 s</span></div></div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center" id="liveActs">
+       <button class="btn primary" data-a="test1">Test 1 · overseas cluster</button>
+       <button class="btn primary" data-a="test2">Test 2 · rapid burst</button>
+       <button class="btn primary" data-a="test3">Test 3 · shared device</button>
+       <button class="btn primary" data-a="test4">Test 4 · mule payee</button>
+       <button class="btn" data-a="v1insert">V1 · insert 6 users</button>
+       <button class="btn" data-a="v1update">V1 · update</button>
+       <button class="btn" data-a="v1delete">V1 · delete</button>
+       <button class="btn" data-a="clean">Clean slate</button>
+       <span class="mono" id="actMsg" style="font-size:12.5px;color:var(--muted)"></span></div>
+     <p style="font-size:12.5px;color:var(--muted)">Each button runs Somit’s own test SQL file. Inserting the same rows from CloudBeaver or Terminal shows up here in the same way.</p></div>`);
+  w.append(pipe);
+  pipe.querySelectorAll('#liveActs button').forEach(b=>b.onclick=async()=>{
+    const msg=$('#actMsg',pipe); msg.textContent='running '+b.dataset.a+'…';
+    try{ const r=await fetch(LIVE.base+'/api/run/'+b.dataset.a,{method:'POST'}); const d=await r.json();
+      msg.textContent=d.ok?('✓ '+b.dataset.a+' ran'):('✗ '+(d.error||'failed').split('\n').pop());
+      msg.style.color=d.ok?'var(--good)':'var(--bad)';
+    }catch(e){ msg.textContent='✗ server not reachable'; msg.style.color='var(--bad)'; }
+  });
+  const rb=el(`<div class="rules">${RULES.map(r=>`<div class="rule" data-r="${r[0]}"><small>${r[1]}</small><b>0</b><small>${r[2]}</small></div>`).join('')}</div>`);
+  w.append(rb);
+  const fa=el(`<div class="grid g2"><div class="panel"><h2>Event stream · staging.live_event_log</h2><div class="feed" id="feed"></div></div>
+     <div class="panel"><h2>Alerts · staging.fraud_events</h2><div class="alerts" id="alerts"></div></div></div>`);
+  w.append(fa);
+  const feed=$('#feed',fa), alerts=$('#alerts',fa);
+  const paintAll=()=>{
+    feed.innerHTML=''; if(!LIVE.events.length) feed.innerHTML='<div class="empty">Waiting for changes. Press a Test button, or insert a row from CloudBeaver.</div>';
+    LIVE.events.slice(-120).forEach(e=>feed.append(evLine(e))); feed.scrollTop=feed.scrollHeight;
+    alerts.innerHTML=''; if(!LIVE.alerts.length) alerts.innerHTML='<div class="empty">No alerts yet.</div>';
+    LIVE.alerts.slice().reverse().forEach(a=>alerts.append(alertCard(a)));
+    RULES.forEach(r=>{ const n=LIVE.counts[r[0]]||0; const c=rb.querySelector(`[data-r="${r[0]}"]`); c.querySelector('b').textContent=n; c.classList.toggle('fired',n>0); });
+  };
+  const ping=(n)=>{ const st=pipe.querySelectorAll('.st'); for(let i=0;i<n;i++) setTimeout(()=>{st[i].classList.add('ping'); setTimeout(()=>st[i].classList.remove('ping'),300);},i*110); };
+  paintAll();
+  LIVE.hook=(d,fresh)=>{
+    if(!document.body.contains(feed)){ LIVE.hook=null; return; }
+    if(fresh){ paintAll(); return; }
+    if(d.events.length){ if(feed.querySelector('.empty')) feed.innerHTML=''; d.events.forEach(e=>feed.append(evLine(e))); feed.scrollTop=feed.scrollHeight; ping(d.alerts.length?6:3); }
+    if(d.alerts.length){ if(alerts.querySelector('.empty')) alerts.innerHTML=''; d.alerts.forEach(a=>alerts.prepend(alertCard(a))); }
+    if(!d.events.length && !d.alerts.length && !LIVE.events.length) paintAll();
+    RULES.forEach(r=>{ const n=LIVE.counts[r[0]]||0; const c=rb.querySelector(`[data-r="${r[0]}"]`); c.querySelector('b').textContent=n; c.classList.toggle('fired',n>0); });
+    if(!LIVE.events.length && feed.children.length && !feed.querySelector('.empty')) paintAll();
+  };
+}
+
+function chLiveReplay(w){
+  const pipe=el(`<div class="panel"><div class="pipe">
+     <div class="st" data-st="0"><b>PostgreSQL</b><span>INSERT · WAL</span></div><span class="ar">→</span>
+     <div class="st" data-st="1"><b>Debezium</b><span>logical replication</span></div><span class="ar">→</span>
+     <div class="st" data-st="2"><b>Redpanda</b><span>Kafka topics</span></div><span class="ar">→</span>
+     <div class="st" data-st="3"><b>fraud.py</b><span>4 rules</span></div><span class="ar">→</span>
+     <div class="st" data-st="4"><b>fraud_events</b><span>alert rows</span></div><span class="ar">→</span>
+     <div class="st" data-st="5"><b>Streamlit</b><span>:8501</span></div></div>
+     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn primary" id="liveBtn">Start replay</button><button class="btn" id="liveReset">Reset</button>
+     <span class="mono" id="liveClock" style="font-size:13px;color:var(--muted)">replay clock 18:55:00</span>
+     <span class="tag warn">Replay of example events. Start live_server.py to switch to live alerts from PostgreSQL.</span></div></div>`);
+  w.append(pipe);
+  const ruleDefs=[["overseas","Overseas cluster","3+ international card-not-present payments on one card in 60 min"],["burst","Rapid burst","5+ approved payments on one card in 10 min"],["device","Shared device","one device used by more than 2 users"],["benef","Suspicious beneficiary","one payee receiving from more than 5 senders"]];
+  const rb=el(`<div class="rules">${ruleDefs.map(r=>`<div class="rule" data-r="${r[0]}"><small>${r[1]}</small><b>0</b><small>${r[2]}</small></div>`).join('')}</div>`);
+  w.append(rb);
+  const fa=el(`<div class="grid g2"><div class="panel"><h2>Event stream</h2><div class="feed" id="feed"><div class="empty">Press Start replay. Each line is one change captured from the database.</div></div></div>
+     <div class="panel"><h2>Alerts · staging.fraud_events</h2><div class="alerts" id="alerts"><div class="empty">No alerts yet.</div></div></div></div>`);
+  w.append(fa);
+  const script=[];
+  let t=0; const add=(dt,e)=>{t+=dt; script.push({t,...e});};
+  const norm=(n)=>{for(let i=0;i<n;i++) add(40+Math.floor(Math.random()*40),[
+     {s:'core',txt:`core_transactions INSERT · CORE_A00${1200+i} · transfer $${(50+Math.random()*900).toFixed(2)} · BEN_${['TELSTRA','ORIGIN','AGL','RENT_'+i][i%4]}`},
+     {s:'card',txt:`card_transactions INSERT · CARD_00${2000+i} · ${['Coles','Woolworths','Uber Australia','JB Hi-Fi'][i%4]} · AUD ${(5+Math.random()*120).toFixed(2)} · APPROVED`},
+     {s:'digital',txt:`digital_events INSERT · DIG_U00${3000+i} · Login · DEV_${4000+i} · 101.167.${i}.${20+i}`}][i%3]);};
+  norm(4);
+  for(let i=1;i<=3;i++) add(240,{s:'card',txt:`card_transactions INSERT · CARD_004211 · Hotel Excelsior Rome · EUR ${(180+i*35).toFixed(2)} · INTERNATIONAL · CNP`,rule:i===3?'overseas':null});
+  norm(3);
+  for(let i=1;i<=5;i++) add(70,{s:'card',txt:`card_transactions INSERT · CARD_001777 · GW_BURST_${i} · AUD ${(90+i*40).toFixed(2)} · APPROVED`,rule:i===5?'burst':null});
+  norm(3);
+  ['DIG_U000835','DIG_U000222','DIG_U000911'].forEach((u,i)=>add(110,{s:'digital',txt:`digital_events INSERT · ${u} · Login · DEV_MULE_RING_01 · 103.216.220.14`,rule:i===2?'device':null}));
+  norm(3);
+  for(let i=1;i<=6;i++) add(60,{s:'core',txt:`core_transactions INSERT · CORE_A0000${40+i} · transfer $${(4000+i*150).toFixed(2)} · BEN_MULE_AGGREGATOR_77`,rule:i===6?'benef':null});
+  norm(4);
+  const alertTxt={overseas:["Overseas cluster","CARD_004211 · 3 international card-not-present payments in 60 min"],burst:["Rapid burst","CARD_001777 · 5 approved payments in 10 min across GW_BURST_1–5"],device:["Shared device","DEV_MULE_RING_01 used by 3 digital users"],benef:["Suspicious beneficiary","BEN_MULE_AGGREGATOR_77 received from 6 senders"]};
+  let idx=0, clock=18*3600+55*60, counts={overseas:0,burst:0,device:0,benef:0};
+  const feed=$('#feed',w), alerts=$('#alerts',w);
+  const hhmm=s=>{const h=Math.floor(s/3600)%24,m=Math.floor(s/60)%60,ss=s%60;return [h,m,ss].map(x=>String(x).padStart(2,'0')).join(':');};
+  const ping=(n)=>{ const st=pipe.querySelectorAll('.st'); for(let i=0;i<n;i++) setTimeout(()=>{st[i].classList.add('ping'); setTimeout(()=>st[i].classList.remove('ping'),260);},i*90); };
+  function step(){
+    if(idx>=script.length){ stopLive(); $('#liveBtn',w).textContent='Replay finished'; return; }
+    const e=script[idx++]; const ts=clock+e.t;
+    $('#liveClock',w).textContent='replay clock '+hhmm(ts);
+    if(feed.querySelector('.empty')) feed.innerHTML='';
+    feed.append(el(`<div><span class="t">${hhmm(ts)}</span> <span class="s-${e.s}">${e.txt}</span></div>`)); feed.scrollTop=feed.scrollHeight;
+    if(e.rule){ ping(6); counts[e.rule]++; const rr=rb.querySelector(`[data-r="${e.rule}"]`); rr.classList.add('fired'); rr.querySelector('b').textContent=counts[e.rule];
+      if(alerts.querySelector('.empty')) alerts.innerHTML='';
+      const [a,b]=alertTxt[e.rule]; alerts.prepend(el(`<div class="alert"><b>${a}</b> · ${b}<small>${hhmm(ts)} · replay</small></div>`)); }
+    else ping(4);
+  }
+  $('#liveBtn',w).onclick=()=>{ if(liveTimer){stopLive(); $('#liveBtn',w).textContent='Resume replay';} else { if(idx>=script.length) return; liveTimer=setInterval(step,650); $('#liveBtn',w).textContent='Pause replay'; } };
+  $('#liveReset',w).onclick=()=>{ stopLive(); idx=0; counts={overseas:0,burst:0,device:0,benef:0}; feed.innerHTML='<div class="empty">Press Start replay.</div>'; alerts.innerHTML='<div class="empty">No alerts yet.</div>'; rb.querySelectorAll('.rule').forEach(r=>{r.classList.remove('fired'); r.querySelector('b').textContent='0';}); $('#liveBtn',w).textContent='Start replay'; $('#liveClock',w).textContent='replay clock 18:55:00'; };
+}
+
+/* ---------- H: results ---------- */
+function chResults(w){
+  w.append(el(`<div class="eyebrow">Chapter H · Results</div>`));
+  w.append(el(`<h1 id="h-H">Built, run and verified in one integrated pass</h1>`));
+  w.append(el(`<p class="mono" style="font-size:12.5px;color:var(--muted)">${F.generated?('Figures read from PostgreSQL “'+(SNAP.database||'lab')+'” by generate_dashboard.py at '+F.generated+'.'):'Figures from the team run of 16 Oct 2026. Run generate_dashboard.py to refresh them from the database.'}</p>`));
+  w.append(el(`<div class="panel"><div class="scroll"><table>
+   <tr><th>Component</th><th>Owner</th><th>Key result</th><th>Proof</th></tr>
+   <tr><td>Source data</td><td>Divaakar</td><td>9 CSVs · 28,500 activity rows · 338 fraud labels</td><td><span class="tag">answer key: 295 rows</span></td></tr>
+   <tr><td>Warehouse</td><td>Maedeh</td><td>4 dims (21,500 rows) · 3 facts (28,500 rows)</td><td><span class="tag good">14 checks pass</span></td></tr>
+   <tr><td>Lakehouse · Report 1</td><td>Raj</td><td>${fmt(F.window)} in window · peak ${monthName(months[peakIdx()[0]])} (${peakIdx()[1]}) · 0 rejected</td><td><span class="tag good">16 / 16 pass</span></td></tr>
+   <tr><td>Graph · Report 2</td><td>Samnang</td><td>342 links · 93 groups · 7 HIGH · 4 rings found</td><td><span class="tag good">V1–V6 · Neo4j MATCH</span></td></tr>
+   <tr><td>Data fabric · Report 3</td><td>Shubham</td><td>${F.objects} objects · ${F.flows} flows · ${rules.length} rules · ${F.rowRate}% rows pass</td><td><span class="tag good">18 / 18 access OK</span></td></tr>
+   <tr><td>Live events</td><td>Somit</td><td>15 notifications (V1) · 4 streaming rules (V2)</td><td><span class="tag good">tests 0–4</span></td></tr></table></div></div>`));
+  w.append(el(`<div class="grid g2"><div class="panel"><h2>What the bank learns</h2><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+   <li>One view of each customer across core, card and digital.</li><li>Activity trends per system, money per currency, declines and failed logins.</li>
+   <li>33 customers in 7 rings to investigate first, plus mule accounts to freeze.</li><li>3,198 ACTIVE cards already expired: card status is stale, owner Head of Cards.</li>
+   <li>Personal data is masked for analysts, and the database enforces it.</li></ul></div>
+   <div class="panel"><h2>Stated limits</h2><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+   <li>Synthetic data; fraud labels were supplied, so results show retrieval, not prediction.</li><li>Warehouse, lakehouse and graph rebuild in batch.</li>
+   <li>Streaming rules are fixed thresholds, not a trained model.</li><li>Catalog classifies by column name; lineage is recorded by hand.</li>
+   <li>No row-level security; quasi-identifiers such as postcode are kept.</li></ul></div></div>`));
+  w.append(el(`<div class="panel"><h2>Questions to expect</h2><div class="grid g2" style="font-size:14px">
+   <p><b>Why both a warehouse and a lakehouse?</b> The warehouse integrates and enforces keys; the lakehouse keeps versioned history for large analytics.</p>
+   <p><b>Why a graph?</b> Multi-hop sharing needs repeated self-joins in SQL; in a graph it is a path.</p>
+   <p><b>Why did 5 rules fail?</b> They are real source problems with owners. Finding them is the point of governance.</p>
+   <p><b>Is HIGH proof of fraud?</b> No. It ranks where to start; one false-positive customer sits in a HIGH group.</p></div></div>`));
+}
+
+/* start */
+let start=0; const h=location.hash.replace('#','');
+if(h && "ABCDEFGH".includes(h) && h.length===1) start="ABCDEFGH".indexOf(h);
+else { try{ const s=parseInt(localStorage.getItem('hz-chap')); if(!isNaN(s)) start=s; }catch(e){} }
+document.getElementById('kRecords').textContent=fmt(F.records); document.getElementById('kCust').textContent=fmt(F.customers);
+document.getElementById('kLabels').textContent=fmt(F.labels); document.getElementById('kHigh').textContent=F.prio.HIGH[0];
+document.getElementById('kRow').textContent=F.rowRate+'%';
+go(start);
+livePoll();
+})();
+</script>
+
+</body>
+</html>

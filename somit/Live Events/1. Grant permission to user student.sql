@@ -1,0 +1,5 @@
+-- Replication user
+ALTER USER student WITH REPLICATION;
+GRANT CONNECT ON DATABASE lab TO student;
+GRANT USAGE ON SCHEMA staging TO student;
+GRANT SELECT ON ALL TABLES IN SCHEMA staging TO student;

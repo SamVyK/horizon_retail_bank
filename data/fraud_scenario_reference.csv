@@ -1,0 +1,296 @@
+fraud_scenario_id,scenario_type,enterprise_customer_key,source_system,affected_record_id,scenario_timestamp,expected_fraud,explanation
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_core_banking,CORE_T000001,2025-03-15 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_01
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_core_banking,CORE_T000002,2025-12-28 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_02
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_core_banking,CORE_T000003,2025-06-23 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_03
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_core_banking,CORE_T000004,2025-10-26 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_04
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_core_banking,CORE_T000005,2025-05-06 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_05
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_core_banking,CORE_T000006,2025-04-15 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_06
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_core_banking,CORE_T000007,2025-07-08 22:27:00,TRUE,External Internet Banking Transfer to BEN_MULE_ATO_07
+SCEN_SHR_DEV_01,Shared Device Ring,ENT_C000021,horizon_core_banking,CORE_T000008,2025-11-05 14:15:00,TRUE,Mobile Banking Transfer to BEN_SYNDICATE_POOL
+SCEN_SHR_DEV_02,Shared Device Ring,ENT_C000036,horizon_core_banking,CORE_T000009,2025-11-05 16:15:00,TRUE,Mobile Banking Transfer to BEN_SYNDICATE_POOL
+SCEN_SHR_DEV_03,Shared Device Ring,ENT_C000037,horizon_core_banking,CORE_T000010,2025-11-05 18:15:00,TRUE,Mobile Banking Transfer to BEN_SYNDICATE_POOL
+SCEN_SHR_DEV_04,Shared Device Ring,ENT_C000038,horizon_core_banking,CORE_T000011,2025-11-05 20:15:00,TRUE,Mobile Banking Transfer to BEN_SYNDICATE_POOL
+SCEN_SHR_DEV_05,Shared Device Ring,ENT_C000039,horizon_core_banking,CORE_T000012,2025-11-05 22:15:00,TRUE,Mobile Banking Transfer to BEN_SYNDICATE_POOL
+SCEN_MULE_BEN_01,Suspicious Beneficiary,ENT_C000003,horizon_core_banking,CORE_T000013,2025-07-22 15:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #366
+SCEN_MULE_BEN_02,Suspicious Beneficiary,ENT_C000023,horizon_core_banking,CORE_T000014,2025-07-22 20:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #600
+SCEN_MULE_BEN_03,Suspicious Beneficiary,ENT_C000027,horizon_core_banking,CORE_T000015,2025-07-23 01:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #745
+SCEN_MULE_BEN_04,Suspicious Beneficiary,ENT_C000040,horizon_core_banking,CORE_T000016,2025-07-23 06:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #765
+SCEN_MULE_BEN_05,Suspicious Beneficiary,ENT_C000043,horizon_core_banking,CORE_T000017,2025-07-23 11:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #379
+SCEN_MULE_BEN_06,Suspicious Beneficiary,ENT_C000044,horizon_core_banking,CORE_T000018,2025-07-23 16:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #493
+SCEN_MULE_BEN_07,Suspicious Beneficiary,ENT_C000045,horizon_core_banking,CORE_T000019,2025-07-23 21:00:00,TRUE,Transfer to BEN_MULE_AGGREGATOR_77 Ref Invoice #791
+LEGIT_HIGH_VAL_01,Legitimate High-Value,ENT_C002979,horizon_core_banking,CORE_T000020,2025-10-16 14:53:00,FALSE,Prestige Motor Vehicles Dealer Settlement
+LEGIT_HIGH_VAL_02,Legitimate High-Value,ENT_C003742,horizon_core_banking,CORE_T000021,2025-03-23 12:20:00,FALSE,Australian Taxation Office BAS Payment
+LEGIT_HIGH_VAL_03,Legitimate High-Value,ENT_C004357,horizon_core_banking,CORE_T000022,2025-02-24 10:51:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_04,Legitimate High-Value,ENT_C004530,horizon_core_banking,CORE_T000023,2025-02-06 12:00:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_05,Legitimate High-Value,ENT_C004194,horizon_core_banking,CORE_T000024,2025-05-27 16:25:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_06,Legitimate High-Value,ENT_C001340,horizon_core_banking,CORE_T000025,2025-11-12 11:29:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_07,Legitimate High-Value,ENT_C000401,horizon_core_banking,CORE_T000026,2025-09-03 15:58:00,FALSE,Prestige Motor Vehicles Dealer Settlement
+LEGIT_HIGH_VAL_08,Legitimate High-Value,ENT_C003356,horizon_core_banking,CORE_T000027,2025-01-08 17:36:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_09,Legitimate High-Value,ENT_C004816,horizon_core_banking,CORE_T000028,2025-07-04 09:33:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_10,Legitimate High-Value,ENT_C002428,horizon_core_banking,CORE_T000029,2025-09-22 12:53:00,FALSE,Prestige Motor Vehicles Dealer Settlement
+LEGIT_HIGH_VAL_11,Legitimate High-Value,ENT_C003957,horizon_core_banking,CORE_T000030,2025-06-04 16:40:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_12,Legitimate High-Value,ENT_C000847,horizon_core_banking,CORE_T000031,2025-06-20 14:55:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_13,Legitimate High-Value,ENT_C001340,horizon_core_banking,CORE_T000032,2025-12-14 17:37:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_14,Legitimate High-Value,ENT_C001785,horizon_core_banking,CORE_T000033,2025-03-06 17:56:00,FALSE,University Tuition Full Fee Semester Advance
+LEGIT_HIGH_VAL_15,Legitimate High-Value,ENT_C000407,horizon_core_banking,CORE_T000034,2025-08-03 12:51:00,FALSE,Prestige Motor Vehicles Dealer Settlement
+LEGIT_HIGH_VAL_16,Legitimate High-Value,ENT_C003098,horizon_core_banking,CORE_T000035,2025-11-05 11:38:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_17,Legitimate High-Value,ENT_C004593,horizon_core_banking,CORE_T000036,2025-04-17 14:33:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_18,Legitimate High-Value,ENT_C000633,horizon_core_banking,CORE_T000037,2025-03-03 10:25:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_19,Legitimate High-Value,ENT_C001529,horizon_core_banking,CORE_T000038,2025-04-25 12:18:00,FALSE,Australian Taxation Office BAS Payment
+LEGIT_HIGH_VAL_20,Legitimate High-Value,ENT_C001476,horizon_core_banking,CORE_T000039,2025-12-01 14:04:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_21,Legitimate High-Value,ENT_C003932,horizon_core_banking,CORE_T000040,2025-09-28 12:34:00,FALSE,Australian Taxation Office BAS Payment
+LEGIT_HIGH_VAL_22,Legitimate High-Value,ENT_C004961,horizon_core_banking,CORE_T000041,2025-09-02 09:23:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_23,Legitimate High-Value,ENT_C003278,horizon_core_banking,CORE_T000042,2025-04-25 09:08:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_24,Legitimate High-Value,ENT_C000373,horizon_core_banking,CORE_T000043,2025-07-24 11:38:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_25,Legitimate High-Value,ENT_C002551,horizon_core_banking,CORE_T000044,2025-06-08 14:37:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_26,Legitimate High-Value,ENT_C002904,horizon_core_banking,CORE_T000045,2025-10-02 17:28:00,FALSE,Prestige Motor Vehicles Dealer Settlement
+LEGIT_HIGH_VAL_27,Legitimate High-Value,ENT_C004064,horizon_core_banking,CORE_T000046,2025-06-07 10:09:00,FALSE,University Tuition Full Fee Semester Advance
+LEGIT_HIGH_VAL_28,Legitimate High-Value,ENT_C004416,horizon_core_banking,CORE_T000047,2025-11-04 13:00:00,FALSE,Commercial Fitout Contractor Progress Payment
+LEGIT_HIGH_VAL_29,Legitimate High-Value,ENT_C001503,horizon_core_banking,CORE_T000048,2025-03-21 13:16:00,FALSE,Prestige Motor Vehicles Dealer Settlement
+LEGIT_HIGH_VAL_30,Legitimate High-Value,ENT_C002582,horizon_core_banking,CORE_T000049,2025-01-24 13:44:00,FALSE,University Tuition Full Fee Semester Advance
+LEGIT_HIGH_VAL_31,Legitimate High-Value,ENT_C002000,horizon_core_banking,CORE_T000050,2025-10-15 11:44:00,FALSE,Property Settlement Deposit Trust Account
+LEGIT_HIGH_VAL_32,Legitimate High-Value,ENT_C001962,horizon_core_banking,CORE_T000051,2025-09-09 09:55:00,FALSE,Australian Taxation Office BAS Payment
+LEGIT_HIGH_VAL_33,Legitimate High-Value,ENT_C003819,horizon_core_banking,CORE_T000052,2025-08-17 16:42:00,FALSE,University Tuition Full Fee Semester Advance
+LEGIT_HIGH_VAL_34,Legitimate High-Value,ENT_C004010,horizon_core_banking,CORE_T000053,2025-11-27 09:59:00,FALSE,Australian Taxation Office BAS Payment
+SCEN_CARD_01,Card Fraud,ENT_C000009,horizon_card_processing,CTX_000001,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_01,Card Fraud,ENT_C000009,horizon_card_processing,CTX_000002,2025-05-12 02:14:00,TRUE,Luxury Fragrance & Fashion London (GBP 1364.83)
+SCEN_CARD_01,Card Fraud,ENT_C000009,horizon_card_processing,CTX_000003,2025-05-12 02:28:00,TRUE,Digital Crypto Vouchers Paris (EUR 1843.38)
+SCEN_CARD_01,Card Fraud,ENT_C000009,horizon_card_processing,CTX_000004,2025-05-12 02:42:00,TRUE,Digital Crypto Vouchers Paris (EUR 1459.14)
+SCEN_CARD_01,Card Fraud,ENT_C000009,horizon_card_processing,CTX_000005,2025-05-12 02:56:00,TRUE,Digital Crypto Vouchers Paris (EUR 2350.59)
+SCEN_CARD_02,Card Fraud,ENT_C000010,horizon_card_processing,CTX_000006,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_02,Card Fraud,ENT_C000010,horizon_card_processing,CTX_000007,2025-05-12 02:14:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1312.01)
+SCEN_CARD_02,Card Fraud,ENT_C000010,horizon_card_processing,CTX_000008,2025-05-12 02:28:00,TRUE,Dubai Gold & Jewels Gateway (AED 1685.76)
+SCEN_CARD_02,Card Fraud,ENT_C000010,horizon_card_processing,CTX_000009,2025-05-12 02:42:00,TRUE,Tokyo Gaming & Tech Direct (JPY 924.0)
+SCEN_CARD_02,Card Fraud,ENT_C000010,horizon_card_processing,CTX_000010,2025-05-12 02:56:00,TRUE,Dubai Gold & Jewels Gateway (AED 1720.67)
+SCEN_CARD_03,Card Fraud,ENT_C000011,horizon_card_processing,CTX_000011,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_03,Card Fraud,ENT_C000011,horizon_card_processing,CTX_000012,2025-05-12 02:14:00,TRUE,Luxury Fragrance & Fashion London (GBP 708.45)
+SCEN_CARD_03,Card Fraud,ENT_C000011,horizon_card_processing,CTX_000013,2025-05-12 02:28:00,TRUE,Apex Global Electronics NYC (USD 1750.03)
+SCEN_CARD_03,Card Fraud,ENT_C000011,horizon_card_processing,CTX_000014,2025-05-12 02:42:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1661.06)
+SCEN_CARD_03,Card Fraud,ENT_C000011,horizon_card_processing,CTX_000015,2025-05-12 02:56:00,TRUE,Luxury Fragrance & Fashion London (GBP 929.63)
+SCEN_CARD_04,Card Fraud,ENT_C000012,horizon_card_processing,CTX_000016,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_04,Card Fraud,ENT_C000012,horizon_card_processing,CTX_000017,2025-05-12 02:14:00,TRUE,Digital Crypto Vouchers Paris (EUR 1357.75)
+SCEN_CARD_04,Card Fraud,ENT_C000012,horizon_card_processing,CTX_000018,2025-05-12 02:28:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1235.02)
+SCEN_CARD_04,Card Fraud,ENT_C000012,horizon_card_processing,CTX_000019,2025-05-12 02:42:00,TRUE,Luxury Fragrance & Fashion London (GBP 1378.97)
+SCEN_CARD_04,Card Fraud,ENT_C000012,horizon_card_processing,CTX_000020,2025-05-12 02:56:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1116.24)
+SCEN_CARD_05,Card Fraud,ENT_C000013,horizon_card_processing,CTX_000021,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_05,Card Fraud,ENT_C000013,horizon_card_processing,CTX_000022,2025-05-12 02:14:00,TRUE,Apex Global Electronics NYC (USD 2278.66)
+SCEN_CARD_05,Card Fraud,ENT_C000013,horizon_card_processing,CTX_000023,2025-05-12 02:28:00,TRUE,Dubai Gold & Jewels Gateway (AED 919.43)
+SCEN_CARD_05,Card Fraud,ENT_C000013,horizon_card_processing,CTX_000024,2025-05-12 02:42:00,TRUE,Luxury Fragrance & Fashion London (GBP 1654.57)
+SCEN_CARD_05,Card Fraud,ENT_C000013,horizon_card_processing,CTX_000025,2025-05-12 02:56:00,TRUE,Luxury Fragrance & Fashion London (GBP 855.54)
+SCEN_CARD_06,Card Fraud,ENT_C000014,horizon_card_processing,CTX_000026,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_06,Card Fraud,ENT_C000014,horizon_card_processing,CTX_000027,2025-05-12 02:14:00,TRUE,Apex Global Electronics NYC (USD 1402.21)
+SCEN_CARD_06,Card Fraud,ENT_C000014,horizon_card_processing,CTX_000028,2025-05-12 02:28:00,TRUE,Digital Crypto Vouchers Paris (EUR 1888.76)
+SCEN_CARD_06,Card Fraud,ENT_C000014,horizon_card_processing,CTX_000029,2025-05-12 02:42:00,TRUE,Tokyo Gaming & Tech Direct (JPY 846.01)
+SCEN_CARD_06,Card Fraud,ENT_C000014,horizon_card_processing,CTX_000030,2025-05-12 02:56:00,TRUE,Digital Crypto Vouchers Paris (EUR 1498.03)
+SCEN_CARD_07,Card Fraud,ENT_C000015,horizon_card_processing,CTX_000031,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_07,Card Fraud,ENT_C000015,horizon_card_processing,CTX_000032,2025-05-12 02:14:00,TRUE,Luxury Fragrance & Fashion London (GBP 770.92)
+SCEN_CARD_07,Card Fraud,ENT_C000015,horizon_card_processing,CTX_000033,2025-05-12 02:28:00,TRUE,Digital Crypto Vouchers Paris (EUR 2014.28)
+SCEN_CARD_07,Card Fraud,ENT_C000015,horizon_card_processing,CTX_000034,2025-05-12 02:42:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1484.74)
+SCEN_CARD_07,Card Fraud,ENT_C000015,horizon_card_processing,CTX_000035,2025-05-12 02:56:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1235.62)
+SCEN_CARD_08,Card Fraud,ENT_C000016,horizon_card_processing,CTX_000036,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_08,Card Fraud,ENT_C000016,horizon_card_processing,CTX_000037,2025-05-12 02:14:00,TRUE,Dubai Gold & Jewels Gateway (AED 1235.13)
+SCEN_CARD_08,Card Fraud,ENT_C000016,horizon_card_processing,CTX_000038,2025-05-12 02:28:00,TRUE,Tokyo Gaming & Tech Direct (JPY 844.79)
+SCEN_CARD_08,Card Fraud,ENT_C000016,horizon_card_processing,CTX_000039,2025-05-12 02:42:00,TRUE,Apex Global Electronics NYC (USD 1998.71)
+SCEN_CARD_08,Card Fraud,ENT_C000016,horizon_card_processing,CTX_000040,2025-05-12 02:56:00,TRUE,Tokyo Gaming & Tech Direct (JPY 736.59)
+SCEN_CARD_09,Card Fraud,ENT_C000017,horizon_card_processing,CTX_000041,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_09,Card Fraud,ENT_C000017,horizon_card_processing,CTX_000042,2025-05-12 02:14:00,TRUE,Dubai Gold & Jewels Gateway (AED 1312.55)
+SCEN_CARD_09,Card Fraud,ENT_C000017,horizon_card_processing,CTX_000043,2025-05-12 02:28:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1076.5)
+SCEN_CARD_09,Card Fraud,ENT_C000017,horizon_card_processing,CTX_000044,2025-05-12 02:42:00,TRUE,Tokyo Gaming & Tech Direct (JPY 1996.42)
+SCEN_CARD_09,Card Fraud,ENT_C000017,horizon_card_processing,CTX_000045,2025-05-12 02:56:00,TRUE,Digital Crypto Vouchers Paris (EUR 1262.82)
+SCEN_CARD_10,Card Fraud,ENT_C000018,horizon_card_processing,CTX_000046,2025-05-10 11:24:00,FALSE,Woolworths Metro (AUD 45.8)
+SCEN_CARD_10,Card Fraud,ENT_C000018,horizon_card_processing,CTX_000047,2025-05-12 02:14:00,TRUE,Digital Crypto Vouchers Paris (EUR 2082.7)
+SCEN_CARD_10,Card Fraud,ENT_C000018,horizon_card_processing,CTX_000048,2025-05-12 02:28:00,TRUE,Dubai Gold & Jewels Gateway (AED 1757.15)
+SCEN_CARD_10,Card Fraud,ENT_C000018,horizon_card_processing,CTX_000049,2025-05-12 02:42:00,TRUE,Apex Global Electronics NYC (USD 841.5)
+SCEN_CARD_10,Card Fraud,ENT_C000018,horizon_card_processing,CTX_000050,2025-05-12 02:56:00,TRUE,Luxury Fragrance & Fashion London (GBP 2138.8)
+SCEN_BURST_01,Rapid Transaction Burst,ENT_C000019,horizon_card_processing,CTX_000051,2025-08-26 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_01,Rapid Transaction Burst,ENT_C000019,horizon_card_processing,CTX_000052,2025-08-26 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_01,Rapid Transaction Burst,ENT_C000019,horizon_card_processing,CTX_000053,2025-08-26 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_01,Rapid Transaction Burst,ENT_C000019,horizon_card_processing,CTX_000054,2025-08-26 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_01,Rapid Transaction Burst,ENT_C000019,horizon_card_processing,CTX_000055,2025-08-26 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_02,Rapid Transaction Burst,ENT_C000020,horizon_card_processing,CTX_000056,2025-09-07 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_02,Rapid Transaction Burst,ENT_C000020,horizon_card_processing,CTX_000057,2025-09-07 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_02,Rapid Transaction Burst,ENT_C000020,horizon_card_processing,CTX_000058,2025-09-07 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_02,Rapid Transaction Burst,ENT_C000020,horizon_card_processing,CTX_000059,2025-09-07 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_02,Rapid Transaction Burst,ENT_C000020,horizon_card_processing,CTX_000060,2025-09-07 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_03,Rapid Transaction Burst,ENT_C000022,horizon_card_processing,CTX_000061,2025-09-19 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_03,Rapid Transaction Burst,ENT_C000022,horizon_card_processing,CTX_000062,2025-09-19 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_03,Rapid Transaction Burst,ENT_C000022,horizon_card_processing,CTX_000063,2025-09-19 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_03,Rapid Transaction Burst,ENT_C000022,horizon_card_processing,CTX_000064,2025-09-19 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_03,Rapid Transaction Burst,ENT_C000022,horizon_card_processing,CTX_000065,2025-09-19 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_04,Rapid Transaction Burst,ENT_C000024,horizon_card_processing,CTX_000066,2025-10-01 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_04,Rapid Transaction Burst,ENT_C000024,horizon_card_processing,CTX_000067,2025-10-01 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_04,Rapid Transaction Burst,ENT_C000024,horizon_card_processing,CTX_000068,2025-10-01 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_04,Rapid Transaction Burst,ENT_C000024,horizon_card_processing,CTX_000069,2025-10-01 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_04,Rapid Transaction Burst,ENT_C000024,horizon_card_processing,CTX_000070,2025-10-01 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_05,Rapid Transaction Burst,ENT_C000025,horizon_card_processing,CTX_000071,2025-10-13 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_05,Rapid Transaction Burst,ENT_C000025,horizon_card_processing,CTX_000072,2025-10-13 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_05,Rapid Transaction Burst,ENT_C000025,horizon_card_processing,CTX_000073,2025-10-13 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_05,Rapid Transaction Burst,ENT_C000025,horizon_card_processing,CTX_000074,2025-10-13 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_05,Rapid Transaction Burst,ENT_C000025,horizon_card_processing,CTX_000075,2025-10-13 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_06,Rapid Transaction Burst,ENT_C000026,horizon_card_processing,CTX_000076,2025-10-25 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_06,Rapid Transaction Burst,ENT_C000026,horizon_card_processing,CTX_000077,2025-10-25 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_06,Rapid Transaction Burst,ENT_C000026,horizon_card_processing,CTX_000078,2025-10-25 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_06,Rapid Transaction Burst,ENT_C000026,horizon_card_processing,CTX_000079,2025-10-25 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_06,Rapid Transaction Burst,ENT_C000026,horizon_card_processing,CTX_000080,2025-10-25 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_07,Rapid Transaction Burst,ENT_C000028,horizon_card_processing,CTX_000081,2025-11-06 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_07,Rapid Transaction Burst,ENT_C000028,horizon_card_processing,CTX_000082,2025-11-06 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_07,Rapid Transaction Burst,ENT_C000028,horizon_card_processing,CTX_000083,2025-11-06 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_07,Rapid Transaction Burst,ENT_C000028,horizon_card_processing,CTX_000084,2025-11-06 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_07,Rapid Transaction Burst,ENT_C000028,horizon_card_processing,CTX_000085,2025-11-06 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_BURST_08,Rapid Transaction Burst,ENT_C000029,horizon_card_processing,CTX_000086,2025-11-18 19:01:00,TRUE,JB Hi-Fi Electronics (AUD 780.0)
+SCEN_BURST_08,Rapid Transaction Burst,ENT_C000029,horizon_card_processing,CTX_000087,2025-11-18 19:03:00,TRUE,Apple Store Retail (AUD 1150.0)
+SCEN_BURST_08,Rapid Transaction Burst,ENT_C000029,horizon_card_processing,CTX_000088,2025-11-18 19:05:00,TRUE,David Jones Flagship (AUD 690.0)
+SCEN_BURST_08,Rapid Transaction Burst,ENT_C000029,horizon_card_processing,CTX_000089,2025-11-18 19:07:00,TRUE,The Star Jewellery Boutique (AUD 1420.0)
+SCEN_BURST_08,Rapid Transaction Burst,ENT_C000029,horizon_card_processing,CTX_000090,2025-11-18 19:09:00,TRUE,Harrods Online Luxury (AUD 950.0)
+SCEN_GEO_01,Geographic Anomaly,ENT_C000030,horizon_card_processing,CTX_000091,2025-10-05 18:00:00,FALSE,Coles Sydney CBD (AUD 54.2)
+SCEN_GEO_01,Geographic Anomaly,ENT_C000030,horizon_card_processing,CTX_000092,2025-10-05 18:40:00,TRUE,Marina Bay Sands Luxury Watch (SGD 880.0)
+SCEN_GEO_02,Geographic Anomaly,ENT_C000031,horizon_card_processing,CTX_000093,2025-10-20 18:00:00,FALSE,Coles Sydney CBD (AUD 54.2)
+SCEN_GEO_02,Geographic Anomaly,ENT_C000031,horizon_card_processing,CTX_000094,2025-10-20 18:40:00,TRUE,Marina Bay Sands Luxury Watch (SGD 880.0)
+SCEN_GEO_03,Geographic Anomaly,ENT_C000032,horizon_card_processing,CTX_000095,2025-11-04 18:00:00,FALSE,Coles Sydney CBD (AUD 54.2)
+SCEN_GEO_03,Geographic Anomaly,ENT_C000032,horizon_card_processing,CTX_000096,2025-11-04 18:40:00,TRUE,Marina Bay Sands Luxury Watch (SGD 880.0)
+SCEN_GEO_04,Geographic Anomaly,ENT_C000033,horizon_card_processing,CTX_000097,2025-11-19 18:00:00,FALSE,Coles Sydney CBD (AUD 54.2)
+SCEN_GEO_04,Geographic Anomaly,ENT_C000033,horizon_card_processing,CTX_000098,2025-11-19 18:40:00,TRUE,Marina Bay Sands Luxury Watch (SGD 880.0)
+SCEN_GEO_05,Geographic Anomaly,ENT_C000034,horizon_card_processing,CTX_000099,2025-12-04 18:00:00,FALSE,Coles Sydney CBD (AUD 54.2)
+SCEN_GEO_05,Geographic Anomaly,ENT_C000034,horizon_card_processing,CTX_000100,2025-12-04 18:40:00,TRUE,Marina Bay Sands Luxury Watch (SGD 880.0)
+SCEN_GEO_06,Geographic Anomaly,ENT_C000035,horizon_card_processing,CTX_000101,2025-12-19 18:00:00,FALSE,Coles Sydney CBD (AUD 54.2)
+SCEN_GEO_06,Geographic Anomaly,ENT_C000035,horizon_card_processing,CTX_000102,2025-12-19 18:40:00,TRUE,Marina Bay Sands Luxury Watch (SGD 880.0)
+FALSE_POS_TRIP_01,False Positive Travel,ENT_C002010,horizon_card_processing,CTX_000103,2025-07-19 15:30:00,FALSE,Hotel Excelsior Rome (EUR 485.84)
+FALSE_POS_TRIP_02,False Positive Travel,ENT_C002172,horizon_card_processing,CTX_000104,2025-07-14 18:18:00,FALSE,Hotel Excelsior Rome (EUR 569.4)
+FALSE_POS_TRIP_03,False Positive Travel,ENT_C002560,horizon_card_processing,CTX_000105,2025-07-09 19:55:00,FALSE,Hotel Excelsior Rome (EUR 306.82)
+FALSE_POS_TRIP_04,False Positive Travel,ENT_C004353,horizon_card_processing,CTX_000106,2025-07-06 15:39:00,FALSE,Hotel Excelsior Rome (EUR 509.01)
+FALSE_POS_TRIP_05,False Positive Travel,ENT_C001409,horizon_card_processing,CTX_000107,2025-07-04 21:33:00,FALSE,Hotel Excelsior Rome (EUR 548.32)
+FALSE_POS_TRIP_06,False Positive Travel,ENT_C000145,horizon_card_processing,CTX_000108,2025-07-10 13:18:00,FALSE,Hotel Excelsior Rome (EUR 534.93)
+FALSE_POS_TRIP_07,False Positive Travel,ENT_C003164,horizon_card_processing,CTX_000109,2025-07-16 14:03:00,FALSE,Hotel Excelsior Rome (EUR 512.15)
+FALSE_POS_TRIP_08,False Positive Travel,ENT_C002416,horizon_card_processing,CTX_000110,2025-07-08 11:21:00,FALSE,Hotel Excelsior Rome (EUR 541.01)
+FALSE_POS_TRIP_09,False Positive Travel,ENT_C003178,horizon_card_processing,CTX_000111,2025-07-20 17:25:00,FALSE,Hotel Excelsior Rome (EUR 809.13)
+FALSE_POS_TRIP_10,False Positive Travel,ENT_C004889,horizon_card_processing,CTX_000112,2025-07-12 12:40:00,FALSE,Hotel Excelsior Rome (EUR 826.56)
+FALSE_POS_TRIP_11,False Positive Travel,ENT_C002566,horizon_card_processing,CTX_000113,2025-07-20 13:22:00,FALSE,Hotel Excelsior Rome (EUR 844.72)
+FALSE_POS_TRIP_12,False Positive Travel,ENT_C002387,horizon_card_processing,CTX_000114,2025-07-06 19:14:00,FALSE,Hotel Excelsior Rome (EUR 770.75)
+FALSE_POS_TRIP_13,False Positive Travel,ENT_C003290,horizon_card_processing,CTX_000115,2025-07-10 18:09:00,FALSE,Hotel Excelsior Rome (EUR 822.98)
+FALSE_POS_TRIP_14,False Positive Travel,ENT_C003371,horizon_card_processing,CTX_000116,2025-07-05 10:40:00,FALSE,Hotel Excelsior Rome (EUR 723.71)
+FALSE_POS_TRIP_15,False Positive Travel,ENT_C002785,horizon_card_processing,CTX_000117,2025-07-04 11:18:00,FALSE,Hotel Excelsior Rome (EUR 645.94)
+FALSE_POS_TRIP_16,False Positive Travel,ENT_C002262,horizon_card_processing,CTX_000118,2025-07-06 20:08:00,FALSE,Hotel Excelsior Rome (EUR 290.32)
+FALSE_POS_TRIP_17,False Positive Travel,ENT_C003154,horizon_card_processing,CTX_000119,2025-07-07 13:07:00,FALSE,Hotel Excelsior Rome (EUR 714.65)
+FALSE_POS_TRIP_18,False Positive Travel,ENT_C003694,horizon_card_processing,CTX_000120,2025-07-14 13:46:00,FALSE,Hotel Excelsior Rome (EUR 530.98)
+FALSE_POS_TRIP_19,False Positive Travel,ENT_C001804,horizon_card_processing,CTX_000121,2025-07-14 19:54:00,FALSE,Hotel Excelsior Rome (EUR 370.4)
+FALSE_POS_TRIP_20,False Positive Travel,ENT_C004566,horizon_card_processing,CTX_000122,2025-07-08 13:23:00,FALSE,Hotel Excelsior Rome (EUR 599.71)
+FALSE_POS_TRIP_21,False Positive Travel,ENT_C000859,horizon_card_processing,CTX_000123,2025-07-17 17:17:00,FALSE,Hotel Excelsior Rome (EUR 250.72)
+FALSE_POS_TRIP_22,False Positive Travel,ENT_C003726,horizon_card_processing,CTX_000124,2025-07-04 18:45:00,FALSE,Hotel Excelsior Rome (EUR 494.51)
+FALSE_POS_TRIP_23,False Positive Travel,ENT_C000591,horizon_card_processing,CTX_000125,2025-07-01 15:29:00,FALSE,Hotel Excelsior Rome (EUR 624.95)
+FALSE_POS_TRIP_24,False Positive Travel,ENT_C004179,horizon_card_processing,CTX_000126,2025-07-13 12:23:00,FALSE,Hotel Excelsior Rome (EUR 639.09)
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000001,2025-03-14 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000002,2025-03-15 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000003,2025-03-15 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000004,2025-03-15 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000005,2025-03-15 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000006,2025-03-15 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000007,2025-03-15 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_01,Account Takeover,ENT_C000001,horizon_digital_banking,DEV_000008,2025-03-15 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000009,2025-12-27 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000010,2025-12-28 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000011,2025-12-28 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000012,2025-12-28 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000013,2025-12-28 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000014,2025-12-28 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000015,2025-12-28 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_02,Account Takeover,ENT_C000002,horizon_digital_banking,DEV_000016,2025-12-28 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000017,2025-06-22 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000018,2025-06-23 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000019,2025-06-23 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000020,2025-06-23 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000021,2025-06-23 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000022,2025-06-23 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000023,2025-06-23 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_03,Account Takeover,ENT_C000004,horizon_digital_banking,DEV_000024,2025-06-23 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000025,2025-10-25 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000026,2025-10-26 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000027,2025-10-26 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000028,2025-10-26 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000029,2025-10-26 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000030,2025-10-26 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000031,2025-10-26 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_04,Account Takeover,ENT_C000005,horizon_digital_banking,DEV_000032,2025-10-26 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000033,2025-05-05 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000034,2025-05-06 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000035,2025-05-06 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000036,2025-05-06 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000037,2025-05-06 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000038,2025-05-06 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000039,2025-05-06 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_05,Account Takeover,ENT_C000006,horizon_digital_banking,DEV_000040,2025-05-06 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000041,2025-04-14 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000042,2025-04-15 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000043,2025-04-15 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000044,2025-04-15 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000045,2025-04-15 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000046,2025-04-15 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000047,2025-04-15 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_06,Account Takeover,ENT_C000007,horizon_digital_banking,DEV_000048,2025-04-15 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000049,2025-07-07 10:15:00,FALSE,Login - Status: SUCCESSFUL
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000050,2025-07-08 22:12:00,FALSE,Login - Status: FAILED
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000051,2025-07-08 22:14:00,FALSE,Login - Status: FAILED
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000052,2025-07-08 22:16:00,FALSE,Login - Status: FAILED
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000053,2025-07-08 22:18:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000054,2025-07-08 22:21:00,TRUE,Update Contact Details - Status: NOT_APPLICABLE
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000055,2025-07-08 22:23:00,TRUE,Add Beneficiary - Status: NOT_APPLICABLE
+SCEN_ATO_07,Account Takeover,ENT_C000008,horizon_digital_banking,DEV_000056,2025-07-08 22:26:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_SHR_DEV_01,Shared Device Ring,ENT_C000021,horizon_digital_banking,DEV_000057,2025-11-05 14:10:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_SHR_DEV_01,Shared Device Ring,ENT_C000021,horizon_digital_banking,DEV_000058,2025-11-05 14:14:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_SHR_DEV_02,Shared Device Ring,ENT_C000036,horizon_digital_banking,DEV_000059,2025-11-05 16:10:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_SHR_DEV_02,Shared Device Ring,ENT_C000036,horizon_digital_banking,DEV_000060,2025-11-05 16:14:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_SHR_DEV_03,Shared Device Ring,ENT_C000037,horizon_digital_banking,DEV_000061,2025-11-05 18:10:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_SHR_DEV_03,Shared Device Ring,ENT_C000037,horizon_digital_banking,DEV_000062,2025-11-05 18:14:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_SHR_DEV_04,Shared Device Ring,ENT_C000038,horizon_digital_banking,DEV_000063,2025-11-05 20:10:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_SHR_DEV_04,Shared Device Ring,ENT_C000038,horizon_digital_banking,DEV_000064,2025-11-05 20:14:00,TRUE,Fund Transfer - Status: COMPLETED
+SCEN_SHR_DEV_05,Shared Device Ring,ENT_C000039,horizon_digital_banking,DEV_000065,2025-11-05 22:10:00,TRUE,Login - Status: SUCCESSFUL
+SCEN_SHR_DEV_05,Shared Device Ring,ENT_C000039,horizon_digital_banking,DEV_000066,2025-11-05 22:14:00,TRUE,Fund Transfer - Status: COMPLETED
+BENIGN_FAM_IPAD,Benign Shared Device,ENT_C000041,horizon_digital_banking,DEV_000067,2025-10-18 19:30:00,FALSE,Login - Status: SUCCESSFUL
+BENIGN_FAM_IPAD,Benign Shared Device,ENT_C000042,horizon_digital_banking,DEV_000068,2025-10-18 19:30:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_01,False Positive Auth,ENT_C000999,horizon_digital_banking,DEV_000069,2025-06-06 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_01,False Positive Auth,ENT_C000999,horizon_digital_banking,DEV_000070,2025-06-06 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_02,False Positive Auth,ENT_C001414,horizon_digital_banking,DEV_000071,2025-06-10 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_02,False Positive Auth,ENT_C001414,horizon_digital_banking,DEV_000072,2025-06-10 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_03,False Positive Auth,ENT_C004581,horizon_digital_banking,DEV_000073,2025-06-04 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_03,False Positive Auth,ENT_C004581,horizon_digital_banking,DEV_000074,2025-06-04 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_04,False Positive Auth,ENT_C003109,horizon_digital_banking,DEV_000075,2025-06-06 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_04,False Positive Auth,ENT_C003109,horizon_digital_banking,DEV_000076,2025-06-06 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_05,False Positive Auth,ENT_C002454,horizon_digital_banking,DEV_000077,2025-06-02 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_05,False Positive Auth,ENT_C002454,horizon_digital_banking,DEV_000078,2025-06-02 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_06,False Positive Auth,ENT_C002915,horizon_digital_banking,DEV_000079,2025-06-20 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_06,False Positive Auth,ENT_C002915,horizon_digital_banking,DEV_000080,2025-06-20 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_07,False Positive Auth,ENT_C003914,horizon_digital_banking,DEV_000081,2025-06-19 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_07,False Positive Auth,ENT_C003914,horizon_digital_banking,DEV_000082,2025-06-19 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_08,False Positive Auth,ENT_C002249,horizon_digital_banking,DEV_000083,2025-06-04 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_08,False Positive Auth,ENT_C002249,horizon_digital_banking,DEV_000084,2025-06-04 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_09,False Positive Auth,ENT_C000099,horizon_digital_banking,DEV_000085,2025-06-14 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_09,False Positive Auth,ENT_C000099,horizon_digital_banking,DEV_000086,2025-06-14 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_10,False Positive Auth,ENT_C003507,horizon_digital_banking,DEV_000087,2025-06-24 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_10,False Positive Auth,ENT_C003507,horizon_digital_banking,DEV_000088,2025-06-24 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_11,False Positive Auth,ENT_C000761,horizon_digital_banking,DEV_000089,2025-06-07 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_11,False Positive Auth,ENT_C000761,horizon_digital_banking,DEV_000090,2025-06-07 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_12,False Positive Auth,ENT_C000481,horizon_digital_banking,DEV_000091,2025-06-07 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_12,False Positive Auth,ENT_C000481,horizon_digital_banking,DEV_000092,2025-06-07 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_13,False Positive Auth,ENT_C003088,horizon_digital_banking,DEV_000093,2025-06-13 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_13,False Positive Auth,ENT_C003088,horizon_digital_banking,DEV_000094,2025-06-13 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_14,False Positive Auth,ENT_C002024,horizon_digital_banking,DEV_000095,2025-06-23 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_14,False Positive Auth,ENT_C002024,horizon_digital_banking,DEV_000096,2025-06-23 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_15,False Positive Auth,ENT_C003665,horizon_digital_banking,DEV_000097,2025-06-17 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_15,False Positive Auth,ENT_C003665,horizon_digital_banking,DEV_000098,2025-06-17 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_16,False Positive Auth,ENT_C004355,horizon_digital_banking,DEV_000099,2025-06-01 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_16,False Positive Auth,ENT_C004355,horizon_digital_banking,DEV_000100,2025-06-01 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_17,False Positive Auth,ENT_C002307,horizon_digital_banking,DEV_000101,2025-06-21 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_17,False Positive Auth,ENT_C002307,horizon_digital_banking,DEV_000102,2025-06-21 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_18,False Positive Auth,ENT_C004222,horizon_digital_banking,DEV_000103,2025-06-13 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_18,False Positive Auth,ENT_C004222,horizon_digital_banking,DEV_000104,2025-06-13 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_19,False Positive Auth,ENT_C003204,horizon_digital_banking,DEV_000105,2025-06-01 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_19,False Positive Auth,ENT_C003204,horizon_digital_banking,DEV_000106,2025-06-01 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_20,False Positive Auth,ENT_C004212,horizon_digital_banking,DEV_000107,2025-06-22 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_20,False Positive Auth,ENT_C004212,horizon_digital_banking,DEV_000108,2025-06-22 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_21,False Positive Auth,ENT_C000037,horizon_digital_banking,DEV_000109,2025-06-12 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_21,False Positive Auth,ENT_C000037,horizon_digital_banking,DEV_000110,2025-06-12 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_22,False Positive Auth,ENT_C000825,horizon_digital_banking,DEV_000111,2025-06-20 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_22,False Positive Auth,ENT_C000825,horizon_digital_banking,DEV_000112,2025-06-20 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_23,False Positive Auth,ENT_C002549,horizon_digital_banking,DEV_000113,2025-06-25 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_23,False Positive Auth,ENT_C002549,horizon_digital_banking,DEV_000114,2025-06-25 08:31:00,FALSE,Login - Status: SUCCESSFUL
+FALSE_POS_LOGIN_24,False Positive Auth,ENT_C002293,horizon_digital_banking,DEV_000115,2025-06-09 08:30:00,FALSE,Login - Status: FAILED
+FALSE_POS_LOGIN_24,False Positive Auth,ENT_C002293,horizon_digital_banking,DEV_000116,2025-06-09 08:31:00,FALSE,Login - Status: SUCCESSFUL

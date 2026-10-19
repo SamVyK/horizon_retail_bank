@@ -1,0 +1,2 @@
+[09:59:07] Horizon prototype run started. Database: lab. Log: C:\Users\somit\OneDrive\Desktop\advanced database project\workspace\horizon\run_log_20261016_095907.txt
+[09:59:07] FAILED container postgres-1 is not running. Run 'docker compose start' in the lab folder.

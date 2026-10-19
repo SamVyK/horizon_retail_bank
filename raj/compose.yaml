@@ -1,0 +1,10 @@
+name: raj-a2-lakehouse
+services:
+  python:
+    build: .
+    volumes:
+      - .:/workspace
+    environment:
+      WAREHOUSE_DSN: ${WAREHOUSE_DSN:-}
+    extra_hosts:
+      - host.docker.internal:host-gateway

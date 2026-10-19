@@ -52,6 +52,28 @@ CLI mode defaults to `dataset-preview`. **Always pass `--mode warehouse` for bui
 
 `normalise()` runs before any Delta write. Fatal dimension problems stop the build. Successful validation is followed by independent `mode='overwrite'` Delta writes, not a single transaction across all tables.
 
+### Logical layer diagrams
+
+The supplied diagrams show logical keys and relationships, not declared Delta primary-key or foreign-key constraints. Row counts shown are recorded baseline observations for the supplied synthetic snapshot, not newly executed results or universal targets. `TIMESTAMP_NTZ` denotes the unzoned timestamp semantics used by the Arrow schema.
+
+#### Bronze: received warehouse snapshots
+
+![Bronze logical model of the seven integrated warehouse snapshots](https://github.com/user-attachments/assets/4a447e70-15f1-4382-9132-e91a9a45ae3e)
+
+*Figure 1. Bronze preserves the seven received warehouse tables as string-valued Delta snapshots. Identity integration has already occurred in PostgreSQL; the connecting keys describe inherited logical relationships.*
+
+#### Silver: identity references and accepted activity
+
+![Silver logical model of identity references and standardised activity events](https://github.com/user-attachments/assets/03841474-ce2d-4deb-862f-0b7e968843a3)
+
+*Figure 2. Silver retains key references in four dimensions and standardises accepted records into `activity_event`. Dashed source-entity joins depend on `source_system`; `audit/quality_issues` is a separate sidecar. Relationship checks run in Python.*
+
+#### Gold: detailed activity and monthly aggregation
+
+![Gold logical model of customer activity and derived monthly summaries](https://github.com/user-attachments/assets/54b423c6-cb57-4ffc-b721-87a1e5f9e4dc)
+
+*Figure 3. Gold exposes `dim_customer` and `fact_activity`; the latter receives the same accepted Arrow table as silver `activity_event`. `report.py` separately derives `monthly_activity` through DuckDB aggregation. The dashed arrow indicates lineage, not a foreign key.*
+
 ### Actual validation and warning rules
 
 | Condition | Implemented policy |

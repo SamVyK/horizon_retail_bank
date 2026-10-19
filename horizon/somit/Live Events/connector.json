@@ -1,0 +1,16 @@
+{
+  "name": "horizon-digital-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "postgres-1",
+    "database.port": "5432",
+    "database.user": "student",
+    "database.password": "student",
+    "database.dbname": "lab",
+    "table.include.list": "staging.card_transactions,staging.digital_events,staging.core_transactions",
+    "topic.prefix": "horizon",
+    "publication.name": "dbz_publication",
+    "publication.autocreate.mode": "disabled"
+  }
+}

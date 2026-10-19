@@ -1,0 +1,6 @@
+{
+  "mode": "warehouse",
+  "created_at": "2026-10-15T23:12:11.728870+00:00",
+  "database": "lab",
+  "origin": "PostgreSQL lab dw schema via read-only repeatable-read export"
+}
